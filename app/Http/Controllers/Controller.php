@@ -10,4 +10,9 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function result($data)
+    {
+        return response()->json($data['data'])->setStatusCode($data['httpCode']);
+    }
 }
