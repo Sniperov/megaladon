@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use App\Presenters\BasePresenter;
 
@@ -70,6 +71,11 @@ class BaseService
     protected function isSuccess(array $result): bool
     {
         return (!empty($result['httpCode']) && $result['httpCode'] === 200);
+    }
+
+    protected function apiAuthUser() :? User
+    {
+        return auth('api')->user();
     }
 
     private function getInfoContext($data)

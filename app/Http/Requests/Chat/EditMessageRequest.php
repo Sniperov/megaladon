@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Chat;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class EditMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth('api')->check();
     }
 
     /**
@@ -24,10 +24,7 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'min:2', 'max:255'],
-            'phone' => ['required', 'string', 'starts_with:+'],
-            'password' => ['required', 'string', 'confirmed'],
-            'city_id' => ['required', 'exists:cities,id'],
+            'message' => ['required', 'string'],
         ];
     }
 }

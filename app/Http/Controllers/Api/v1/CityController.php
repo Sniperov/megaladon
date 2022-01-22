@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Services\CityService;
+use App\Http\Controllers\ApiController;
+use App\Services\v1\CityService;
 use Illuminate\Http\Request;
 
-class CityController extends Controller
+class CityController extends ApiController
 {
     private CityService $cityService;
 
