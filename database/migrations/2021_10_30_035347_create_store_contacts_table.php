@@ -15,9 +15,9 @@ class CreateStoreContactsTable extends Migration
     {
         Schema::create('store_contacts', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('executor_id');
+            $table->bigInteger('store_id');
             $table->enum('type', ['email', 'site', 'phone', 'home_phone']);
-            $table->string('contact_name');
+            $table->string('contact_name')->nullable();
             $table->string('value');
             $table->timestamps();
         });

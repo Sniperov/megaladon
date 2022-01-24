@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services\v1;
+
 use App\Http\Requests\Order\CommentOrderRequest;
 use App\Models\Order;
 use App\Models\User;
@@ -76,8 +78,9 @@ class OrderService extends BaseService
         return $this->ok('Сообщение отправленно');
     }
 
-    public function getOffers(User $user, $orderId): array
+    public function getOffers($orderId): array
     {
+        $user = $this->apiAuthUser();
         $order = Order::find($orderId);
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
@@ -92,5 +95,23 @@ class OrderService extends BaseService
         return $this->result([
             'offers' => $offerRepo->getByOrderId($orderId),
         ]);
+    }
+
+    public function infoOffer($orderId, $offerId)
+    {
+        $user = $this->apiAuthUser();
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+
+        if ($order->user_id != $user->id) {
+            return $this->error(403, 'У вас нет доступа для просмотра предложений этого заказа');
+        }
+
+        $offerRepo = new OrderOfferRepo();
+        $offer = $offerRepo->info($offerId);
+        
+        return $this->result($offer->toArray());
     }
 }

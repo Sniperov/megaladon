@@ -54,7 +54,8 @@ class AuthController extends ApiController
 
     public function sendCode(SendCodeRequest $request)
     {
-        return $this->result((new PhoneConfirmationService())->sendCode($this->authUser()->phone));
+        $user = $this->authUser();
+        return $this->result((new PhoneConfirmationService())->sendCode($user, $user->phone));
     }
 
     public function logout()

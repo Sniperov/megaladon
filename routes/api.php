@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\v1\ExecutorController;
 use App\Http\Controllers\Api\v1\OrderOfferController;
+use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\StoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +40,15 @@ Route::group(['guard' => 'api'], function () {
         });
     });
 
+    Route::group(['prefix' => 'user', 'guard' => 'api', 'middleware' => 'auth'], function () {
+        Route::put('/store', [StoreController::class, 'updateProfile']);
+        Route::put('/executor', [ExecutorController::class, 'updateProfile']);
+        Route::post('/change-phone/start', [UserController::class, 'startChangePhone']);
+        Route::post('/change-phone/end', [UserController::class, 'endChangePhone']);
+        Route::post('/change-token', [UserController::class, 'updateToken']);
+        Route::delete('/disable-notifications', [UserController::class, 'disableNotifications']);
+    });
+
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index']);
 
@@ -48,6 +60,13 @@ Route::group(['guard' => 'api'], function () {
             Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
             Route::get('/{id}/offer', [OrderOfferController::class, 'getOffers']);
             Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
+        });
+    });
+
+    Route::group(['prefix' => 'store'], function() {
+        Route::get('/', [StoreController::class, 'index']);
+
+        Route::group(['guard' => 'api', 'middleware' => 'auth'], function () {
         });
     });
 

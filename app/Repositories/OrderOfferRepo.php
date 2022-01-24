@@ -17,4 +17,10 @@ class OrderOfferRepo
             ->where('order_id', $orderId)
             ->get();
     }
+
+    public function info($offerId)
+    {
+        return OrderOffer::with('user')
+            ->find($offerId);
+    }
 }

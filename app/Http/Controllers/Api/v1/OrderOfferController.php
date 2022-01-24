@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\CreateOrderOfferRequest;
 use Illuminate\Http\Request;
-use OrderService;
+use App\Services\v1\OrderService;
 
 class OrderOfferController extends ApiController
 {
@@ -24,11 +24,11 @@ class OrderOfferController extends ApiController
 
     public function orderOffers($id)
     {
-        return $this->result($this->orderService->getOffers($this->authUser(), $id));
+        return $this->result($this->orderService->getOffers($id, $offerId));
     }
 
     public function info($id, $offerId)
     {
-        # code...
+        return $this->result($this->orderService->infoOffer($id, $offerId));
     }
 }
