@@ -5,6 +5,8 @@ namespace App\Services\v1;
 use App\Http\Requests\Order\CommentOrderRequest;
 use App\Models\Order;
 use App\Models\User;
+use App\Presenters\v1\OfferPresenter;
+use App\Presenters\v1\OrderPresenter;
 use App\Repositories\CommentRepo;
 use App\Repositories\OrderOfferRepo;
 use App\Services\BaseService;
@@ -22,9 +24,10 @@ class OrderService extends BaseService
         $data['user_id'] = $user->id;
         $data['executor_id'] = 0;
         $data['status'] = Order::STATUS_MODERATE;
+        $order = $this->orderRepo->store($data);
 
         return $this->result([
-            'order' => $this->orderRepo->store($data)
+            'order' => (new OrderPresenter($order))->detail(),
         ]);
     }
 
@@ -34,7 +37,7 @@ class OrderService extends BaseService
         $data['user_id'] = $user->id;
 
         return $this->result([
-            'orderOffer' => $offerRepo->store($data),
+            'orderOffer' => (new OfferPresenter($offerRepo->store($data)))->info(),
         ]);
     }
 
@@ -58,8 +61,11 @@ class OrderService extends BaseService
 
     public function index($params)
     {
-        $result = $this->orderRepo->index($params);
-        return $this->result(['orders' => $result]);
+        $orders = $this->orderRepo->index($params);
+
+        return $this->result([
+            'orders' => $this->resultCollections($orders, OrderPresenter::class, 'list'),
+        ]);
     }
 
     public function info($id)
@@ -68,7 +74,9 @@ class OrderService extends BaseService
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
         }
-        return $this->result(['order' => $order]);
+        return $this->result([
+            'order' => (new OrderPresenter($order))->details(),
+        ]);
     }
 
     public function commentOrder($data)
@@ -92,9 +100,7 @@ class OrderService extends BaseService
 
         $offerRepo = new OrderOfferRepo();
 
-        return $this->result([
-            'offers' => $offerRepo->getByOrderId($orderId),
-        ]);
+        return $this->resultCollections($offerRepo->getByOrderId($orderId), OfferPresenter::class, 'list');
     }
 
     public function infoOffer($orderId, $offerId)
@@ -112,6 +118,8 @@ class OrderService extends BaseService
         $offerRepo = new OrderOfferRepo();
         $offer = $offerRepo->info($offerId);
         
-        return $this->result($offer->toArray());
+        return $this->result([
+            'offer' => (new OfferPresenter($offer))->info(),
+        ]);
     }
 }

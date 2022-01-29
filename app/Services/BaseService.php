@@ -86,12 +86,12 @@ class BaseService
         }
         return $info;
     }
-    // protected function resultCollections($collections, $classPresenter = null, $method = null, $totals = null): array
-    // {
-    //     $data['list'] = BasePresenter::presentCollections($collections, $classPresenter, $method);
-    //     if ($totals) {
-    //         $data['totals'] = $totals;
-    //     }
-    //     return $this->result($data);
-    // }
+    protected function resultCollections($collections, $classPresenter = null, $method = null, $totals = null): array
+    {
+        $data['list'] = BasePresenter::presentCollections($collections, $classPresenter, $method);
+        if ($totals) {
+            $data['totals'] = $totals;
+        }
+        return $this->result($data);
+    }
 }

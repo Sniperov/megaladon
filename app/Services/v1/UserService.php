@@ -3,6 +3,7 @@
 namespace App\Services\v1;
 
 use App\Models\User;
+use App\Presenters\v1\UserPresenter;
 use App\Repositories\PhoneConfirmationRepo;
 use App\Repositories\UserRepo;
 use App\Services\BaseService;
@@ -20,7 +21,7 @@ class UserService extends BaseService
     public function updateProfile(User $user, $data)
     {
         $updatedUser = $this->userRepo->update($user->id, $data);
-        return $this->result(['user' => $updatedUser]);
+        return $this->result(['user' => (new UserPresenter($updatedUser))->profile()]);
     }
     
     public function resetPassword(User $user)

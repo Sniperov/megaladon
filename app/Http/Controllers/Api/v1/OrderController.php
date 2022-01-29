@@ -8,7 +8,7 @@ use App\Http\Requests\Order\{
     IndexOrderRequest,
     UpdateOrderRequest,
 };
-use OrderService;
+use App\Services\v1\OrderService;
 
 class OrderController extends ApiController
 {

@@ -4,6 +4,7 @@ namespace App\Services\v1;
 
 use App\Models\Store;
 use App\Models\User;
+use App\Presenters\v1\StorePresenter;
 use App\Repositories\StoreRepo;
 use App\Services\BaseService;
 
@@ -29,10 +30,9 @@ class StoreService extends BaseService
 
     public function index(array $params)
     {
-        return $this->result([
-            'list' => $this->storeRepo->index($params),
-            'total_count' => $this->storeRepo->count($params),
-        ]);
+        $stores = $this->storeRepo->index($params);
+        $count = $this->storeRepo->count($params);
+        return $this->resultCollections($stores, StorePresenter::class, 'list', $count);
     }
 
     public function info($id)
@@ -43,6 +43,6 @@ class StoreService extends BaseService
             return $this->errNotFound('Магазин не найден');
         }
 
-        return $this->result($store->toArray());
+        return $this->result(['store' => (new StorePresenter($store))->detail()]);
     }
 }

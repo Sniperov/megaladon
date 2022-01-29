@@ -65,4 +65,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Store::class, 'user_id', 'id');
     }
+
+    public function countCompletedOrders()
+    {
+        return $this->hasMany(Order::class, 'executor_id')
+            ->where('status', Order::STATUS_COMPLETED)
+            ->count();
+    }
 }

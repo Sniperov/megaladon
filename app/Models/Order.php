@@ -31,4 +31,21 @@ class Order extends Model
     {
         return $this->hasMany(OrderOffer::class, 'order_id');
     }
+
+    public function getStatusName() : string
+    {
+        switch ($this->status) {
+            case self::STATUS_MODERATE:
+                return 'На проверке';
+            case self::STATUS_ACTIVE:
+                return 'Активный';
+            case self::STATUS_HAS_EXECUTOR:
+                return 'В работе';
+            case self::STATUS_COMPLETED:
+                return 'Выполнен';
+            case self::STATUS_ARCHIVE:
+                return 'В архиве';
+        }
+        return '';
+    }
 }
