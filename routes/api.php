@@ -44,7 +44,7 @@ Route::group(['guard' => 'api'], function () {
 
     Route::group(['prefix' => 'user', 'middleware' => 'api'], function () {
         Route::put('/store', [StoreController::class, 'updateProfile']);
-        Route::put('/executor', [ExecutorController::class, 'updateProfile']);
+        Route::put('/executor', [ExecutorController::class, 'update']);
         Route::post('/change-phone/start', [UserController::class, 'startChangePhone']);
         Route::post('/change-phone/end', [UserController::class, 'endChangePhone']);
         Route::post('/change-token', [UserController::class, 'updateToken']);

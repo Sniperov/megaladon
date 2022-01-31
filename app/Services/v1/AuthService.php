@@ -75,6 +75,8 @@ class AuthService extends BaseService
         $executor = $executorRepo->store($data);
         $executor->services()->sync($data['services']);
 
+        $executor = $executorRepo->info($user->id);
+
         return $this->result([
             'user' => $user,
             'executor' => $executor,

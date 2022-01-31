@@ -18,6 +18,6 @@ class ExecutorController extends ApiController
     public function update(ExecutorUpdateRequest $request)
     {
         $data = $request->validated();
-        return $this->result($this->executorService->store($data));
+        return $this->result($this->executorService->update($data));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use App\Presenters\v1\ExecutorPresenter;
 use App\Repositories\ExecutorRepo;
 use App\Services\BaseService;
 
@@ -11,20 +12,6 @@ class ExecutorService extends BaseService
 
     public function __construct() {
         $this->executorRepo = new ExecutorRepo();
-    }
-
-    public function store(array $data)
-    {
-        $user = auth('api')->user();
-        if (is_null($user)) {
-            return $this->errNotFound('Пользователь не найден');
-        }
-        if (!is_null($this->executorRepo->findByUserId($user->id))) {
-            return $this->errValidate('Вы уже зарегистрированны как исполнитель');
-        }
-        $data['user_id'] = $user->id;
-
-        return $this->result(['executor' => $this->executorRepo->store($data)]);
     }
 
     public function update(array $data)
@@ -41,6 +28,10 @@ class ExecutorService extends BaseService
             return $this->errValidate('Вы не зарегистрированны как исполнитель');
         }
 
-        return $this->executorRepo->update($user->id, $data);
+        $executor->services()->sync($data['services']);
+        unset($data['services']);
+        $this->executorRepo->update($user->id, $data);
+
+        return $this->result(['executor' => (new ExecutorPresenter($this->executorRepo->info($user->id)))->edited()]);
     }
 }
