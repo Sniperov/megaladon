@@ -24,7 +24,7 @@ class AuthService extends BaseService
     {
         $user = $this->userRepo->getUserByPhone($data['phone']);
         if (is_null($user)) {
-            return $this->errNotFound('Пользователь с таким телефоном не найден');
+            return $this->errNotFound('Неверные номер пользователя или пароль');
         }
 
         if ($user->is_phone_confirmed == 0) {
@@ -32,7 +32,7 @@ class AuthService extends BaseService
         }
         
         if (! $token = auth('api')->attempt($data)) {
-            return $this->error(401, 'Unauthorized');
+            return $this->error(401, 'Неверные номер пользователя или пароль');
         }
 
         return $this->result([

@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\Api\v1\ExecutorController;
-use App\Http\Controllers\Api\v1\OrderOfferController;
-use App\Http\Controllers\Api\v1\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Api\v1\{
+    ExecutorController,
+    OrderOfferController,
+    UserController, 
+    AuthController,
+    ChatController,
+    CityController,
+    OrderController,
+    ProductCategoryController,
+    StoreController,
+};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +35,7 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/confirm-code', [AuthController::class, 'confirmCode']);
         
         Route::group(['guard' => 'api', 'middleware' => 'auth'], function () {
-            Route::post('/send-code', [AuthController::class, 'sendCode']);
+            // Route::post('/send-code', [AuthController::class, 'sendCode']);
             Route::post('/register-executor', [AuthController::class, 'registerExecutor']);
             Route::post('/register-store', [AuthController::class, 'registerStore']);
             Route::delete('/logout', [AuthController::class, 'logout']);
