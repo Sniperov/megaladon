@@ -61,14 +61,14 @@ class UserService extends BaseService
         return $this->ok('Телефон изменён');
     }
 
-    public function updateToken($token) : array
+    public function updateToken(array $data) : array
     {
         $user = $this->apiAuthUser();
         if (is_null($user)) {
             return $this->error(403, 'Пользователь не авторизован');
         }
         $data = [
-            'device_token' => $token,
+            'device_token' => $data['token'],
             'push_notifications' => 1,
         ];
         $this->userRepo->update($user->id, $data);
