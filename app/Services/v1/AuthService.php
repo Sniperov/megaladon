@@ -63,9 +63,17 @@ class AuthService extends BaseService
         if (is_null($user)) {
             return $this->error(403, 'Auth error');
         }
+
+        $executorRepo = new ExecutorRepo();
+        $executor = $executorRepo->findByUserId($user->id);
+        if (!is_null($executor)) {
+            return $this->error(406, 'Вы уже зарегистированны как исполнитель');
+        }
+
         $data['user_id'] = $user->id;
 
-        $executor = (new ExecutorRepo())->store($data);
+        $executor = $executorRepo->store($data);
+        $executor->services()->sync($data['services']);
 
         return $this->result([
             'user' => $user,
@@ -101,7 +109,8 @@ class AuthService extends BaseService
             return $this->error(400, 'Код подтверждения указан неверно');
         }
 
-        $user = $this->userRepo->confirmPhone($data['phone']);
+        $this->userRepo->confirmPhone($data['phone']);
+        $user = $this->userRepo->getUserByPhone($data['phone']);
         $token = auth('api')->login($user);
 
         return $this->result([

@@ -24,13 +24,14 @@ class ExecutorUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'type_id' => ['nullable', 'integer', 'exists:executor_service_types,id'],
-            'name' => ['nullable', 'string'],
-            'bin' => ['nullable', 'string'],
+            'type_id' => ['nullable', 'integer', 'exists:company_types,id'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'bin' => ['nullable', 'string', 'min:12', 'max:12'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'lat' => ['nullable', 'numeric'],
             'lon' => ['nullable', 'numeric'],
-            'full_address' => ['nullable', 'string'],
+            'full_address' => ['nullable', 'string', 'max:255'],
+            'services.*' => ['required', 'integer', 'exists:service_types,id'],
         ];
     }
 }

@@ -24,7 +24,7 @@ class ConfirmCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', 'starts_with:+'],
             'code' => ['required', 'string'],
         ];
     }

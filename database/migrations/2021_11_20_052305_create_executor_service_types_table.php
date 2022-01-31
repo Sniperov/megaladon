@@ -16,7 +16,7 @@ class CreateExecutorServiceTypesTable extends Migration
         Schema::create('executor_service_types', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('executor_id')->index();
-            $table->bigInteger('order_category_id');
+            $table->bigInteger('service_type_id')->index();
         });
     }
 

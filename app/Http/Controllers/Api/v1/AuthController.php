@@ -7,7 +7,7 @@ use App\Http\Requests\Auth\ConfirmCodeRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\SendCodeRequest;
-use App\Http\Requests\ExecutorRegisterRequest;
+use App\Http\Requests\Auth\ExecutorRegisterRequest;
 use App\Http\Requests\StoreRegistrationRequest;
 use App\Services\v1\AuthService;
 use App\Services\v1\PhoneConfirmationService;

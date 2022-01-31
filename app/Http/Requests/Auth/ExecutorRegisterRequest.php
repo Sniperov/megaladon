@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,13 +24,14 @@ class ExecutorRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'organization_type' => ['required', 'integer', 'exists:organization_types,id'],
-            'organization_name' => ['required', 'string'],
+            'type_id' => ['required', 'integer', 'exists:company_types,id'],
+            'name' => ['required', 'string'],
             'bin' => ['nullable', 'string', 'min:12', 'max:12'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
             'lon' => ['required', 'numeric'],
             'lat' => ['required', 'numeric'],
-            'services.*' => ['required', 'integer', 'exists:services,id'],
+            'full_address' => ['required', 'string', 'max:255'],
+            'services.*' => ['required', 'integer', 'exists:service_types,id'],
         ];
     }
 }

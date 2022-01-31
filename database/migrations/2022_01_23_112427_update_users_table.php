@@ -15,7 +15,7 @@ class UpdateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('push_notifications')->default(1);
-            $table->sting('device_token')->nullable();
+            $table->string('device_token')->nullable();
         });
     }
 
