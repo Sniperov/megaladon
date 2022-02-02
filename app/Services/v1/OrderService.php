@@ -11,6 +11,7 @@ use App\Repositories\CommentRepo;
 use App\Repositories\OrderOfferRepo;
 use App\Repositories\OrderRepo;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\Storage;
 
 class OrderService extends BaseService
 {
@@ -31,7 +32,7 @@ class OrderService extends BaseService
             foreach($data['files'] as $file) {
                 $path = $file->store('public/order/'.$order->id);
                 $order->media()->create([
-                    'storage_link' => $path, 
+                    'storage_link' => Storage::url($path), 
                 ]);
             }
         }
@@ -73,9 +74,7 @@ class OrderService extends BaseService
     {
         $orders = $this->orderRepo->index($params);
 
-        return $this->result([
-            'orders' => $this->resultCollections($orders, OrderPresenter::class, 'list'),
-        ]);
+        return $this->resultCollections($orders, OrderPresenter::class, 'list');
     }
 
     public function info($id)

@@ -24,7 +24,7 @@ class IndexOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'category' => ['nullable', 'integer', 'exists:categories,id'],
+            'category' => ['nullable', 'integer', 'exists:order_categories,id'],
             'status' => ['nullable', 'array'],
             'status.*' => ['required_with:status', 'integer'],
             'startRow' => ['nullable', 'integer'],

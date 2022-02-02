@@ -19,7 +19,7 @@ class OrderRepo
 
     public function index($params)
     {
-        $query = Order::with('media', 'category');
+        $query = Order::query();
         $query = $this->applyFilterQuery($query, $params);           
         $query = $this->applyPaginationQuery($query, $params);
         return $query->get();
@@ -27,22 +27,23 @@ class OrderRepo
 
     private function applyFilterQuery($query, $params)
     {
-        $query->when($params['category_id'], function ($query) use ($params) {
-            return $query->where('category_id', $params['category_id']);
-        })
-        ->when($params['status'], function ($query) use ($params) {
-            return $query->whereIn('status', $params['status']);
-        });
+        if (isset($params['category'])) {
+            $query->where('category_id', $params['category']);
+        }
+
+        if (isset($params['status'])) {
+            $query->whereIn('status', $params['status']);
+        }
 
         return $query;
     }
 
     private function applyPaginationQuery($query, $params)
     {
-        if ($params['startRow']) {
+        if (isset($params['startRow'])) {
             $query->skip($params['startRow']);
         }
-        if ($params['rowsPerPage']) {
+        if (isset($params['rowsPerPage'])) {
             $query->take($params['rowsPerPage']);
         } else {
             $query->take(100);

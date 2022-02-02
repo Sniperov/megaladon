@@ -9,7 +9,13 @@ class OrderPresenter extends BasePresenter
     public function list()
     {
         return [
-
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => mb_strimwidth($this->description, 0, 128, "..."),
+            'count_offers' => $this->countOffers(),
+            'created_at' => date('d.m.Y', strtotime($this->created_at)),
+            'status' => $this->getStatusName(), 
+            'status_code' => $this->status,
         ];
     }
 
