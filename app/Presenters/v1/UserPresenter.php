@@ -2,18 +2,18 @@
 
 namespace App\Presenters\v1;
 
-use App\Services\BaseService;
+use App\Presenters\BasePresenter;
 
-class UserPresenter extends BaseService
+class UserPresenter extends BasePresenter
 {
     public function profile()
     {
         return [
             'name' => $this->name,
-            'photo_url' => $this->photo_url,
+            'photo_url' => url($this->photo_url),
             'phone' => $this->phone,
-            'executor' => (new ExecutorPresenter($this->executor))->detail(),
-            'store' => (new StorePresenter($this->store))->detail(),
+            'executor' => $this->executor ? (new ExecutorPresenter($this->executor))->edited() : null,
+            'store' => $this->store ? (new StorePresenter($this->store))->detail() : null,
         ];
     }
 
@@ -21,7 +21,7 @@ class UserPresenter extends BaseService
     {
         return [
             'name' => $this->name,
-            'photo_url' => $this->photo_url,
+            'photo_url' => url($this->photo_url),
             'count_orders' => $this->count_orders,
             'rating' => $this->rating,
         ];

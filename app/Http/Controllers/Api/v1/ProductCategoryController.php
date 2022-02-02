@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\ApiController;
 use App\Repositories\ProductCategoryRepo;
 use Illuminate\Http\Request;
 
-class ProductCategoryController extends Controller
+class ProductCategoryController extends ApiController
 {
     private ProductCategoryRepo $categoryRepo;
 
@@ -15,6 +16,7 @@ class ProductCategoryController extends Controller
 
     public function index()
     {
-        return $this->result(['categories' => $this->categoryRepo->index()]);
+        $productCategories = $this->categoryRepo->index();
+        return $this->result(['categories' => $productCategories]);
     }
 }

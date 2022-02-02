@@ -79,13 +79,6 @@ class OrderService extends BaseService
         ]);
     }
 
-    public function commentOrder($data)
-    {
-        $data['user_id'] = auth('api')->id();
-        (new CommentRepo())->store($data);
-        return $this->ok('Сообщение отправленно');
-    }
-
     public function getOffers($orderId): array
     {
         $user = $this->apiAuthUser();

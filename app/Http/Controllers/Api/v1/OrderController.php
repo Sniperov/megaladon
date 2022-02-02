@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\Order\{
     CommentOrderRequest,
     CreateOrderRequest,
@@ -15,7 +16,7 @@ class OrderController extends ApiController
     private OrderService $orderService;
 
     public function __construct() {
-        $this->var = new OrderService();
+        $this->orderService = new OrderService();
     }
 
     public function store(CreateOrderRequest $request)

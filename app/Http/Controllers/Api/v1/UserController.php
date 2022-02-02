@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\EndChangePhoneRequest;
 use App\Http\Requests\User\ChangePhoneRequest;
+use App\Http\Requests\User\GetProfileRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Requests\User\UpdateTokenRequest;
+use App\Http\Requests\User\UpdateUserPhotoRequest;
 use App\Services\v1\UserService;
 use Illuminate\Support\Facades\Request;
 
@@ -18,10 +20,23 @@ class UserController extends ApiController
         $this->userService = new UserService();
     }
 
+    public function updatePhoto(UpdateUserPhotoRequest $request)
+    {
+        $data = $request->validated();
+        $response = $this->userService->updatePhoto($this->authUser(), $data);
+        return $this->result($response);
+    }
+
     public function updateProfile(UpdateProfileRequest $request)
     {
         $data = $request->validated();
         $response = $this->userService->updateProfile($this->authUser(), $data);
+        return $this->result($response);
+    }
+
+    public function profile(GetProfileRequest $request, $id)
+    {
+        $response = $this->userService->profile($id);
         return $this->result($response);
     }
 

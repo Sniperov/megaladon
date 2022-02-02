@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use App\Presenters\v1\CityPresenter;
 use App\Repositories\CityRepo;
 use App\Services\BaseService;
 
@@ -16,6 +17,6 @@ class CityService extends BaseService
     public function getAll()
     {
         $cities = $this->cityRepo->getAll();
-        return $this->result(['cities' => $cities]);
+        return $this->resultCollections($cities, CityPresenter::class, 'list');
     }
 }

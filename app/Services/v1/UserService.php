@@ -8,6 +8,7 @@ use App\Repositories\PhoneConfirmationRepo;
 use App\Repositories\UserRepo;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserService extends BaseService
@@ -18,10 +19,26 @@ class UserService extends BaseService
         $this->userRepo = new UserRepo();
     }
 
+    public function updatePhoto(User $user, $data)
+    {
+        $path = $data['photo']->store('public/users');
+        $this->userRepo->update($user->id, ['photo_url' => Storage::url($path)]);
+        return $this->ok();
+    }
+
     public function updateProfile(User $user, $data)
     {
         $updatedUser = $this->userRepo->update($user->id, $data);
         return $this->result(['user' => (new UserPresenter($updatedUser))->profile()]);
+    }
+    
+    public function profile(int $userId)
+    {
+        $user = User::find($userId);
+        if (is_null($user)) {
+            return $this->errNotFound('Пользователь не найден');
+        }
+        return $this->result(['user' => (new UserPresenter($user))->profile()]);
     }
     
     public function resetPassword(User $user)

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\v1\{
     OrderOfferController,
     UserController, 
     AuthController,
+    CatalogController,
     ChatController,
     CityController,
     OrderController,
@@ -26,8 +27,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['guard' => 'api'], function () {
-    Route::get('/cities', [CityController::class, 'getAll']);
-    Route::post('/product-categories', [ProductCategoryController::class, 'index']);
+    Route::get('/cities', [CatalogController::class, 'cities']);
+    Route::get('/order-categories', [CatalogController::class, 'orderCategories']);
+    Route::get('/product-categories', [ProductCategoryController::class, 'index']);
     
     Route::group(['prefix' => '/auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -43,8 +45,10 @@ Route::group(['guard' => 'api'], function () {
     });
 
     Route::group(['prefix' => 'user', 'middleware' => 'api'], function () {
+        Route::get('/{id}', [UserController::class, 'profile']);
         Route::put('/store', [StoreController::class, 'updateProfile']);
         Route::put('/executor', [ExecutorController::class, 'update']);
+        Route::post('/update-photo', [UserController::class, 'updatePhoto']);
         Route::post('/change-phone/start', [UserController::class, 'startChangePhone']);
         Route::post('/change-phone/end', [UserController::class, 'endChangePhone']);
         Route::post('/change-token', [UserController::class, 'updateToken']);
@@ -56,7 +60,6 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/create', [OrderController::class, 'store']);
         Route::get('/{id}', [OrderController::class, 'info']);
         Route::put('/{id}/update', [OrderController::class, 'update']);
-        Route::post('/{id}/comment', [OrderController::class, 'commentOrder']);
         Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
         Route::get('/{id}/offer', [OrderOfferController::class, 'getOffers']);
         Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);

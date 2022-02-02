@@ -9,10 +9,16 @@ class StorePresenter extends BasePresenter
     public function detail()
     {
         return [
-            'type' => ['id' => $this->type_id, 'name' => $this->type->name],
+            'type' => !is_null($this->type) ? [
+                'id' =>  $this->type->id,
+                'name' => $this->type->name,
+            ] : null,
             'name' => $this->name,
             'bin' => $this->bin,
-            'city' => ['id' => $this->city_id, 'name' => $this->city->name],
+            "city" => !is_null($this->city) ? [
+                'id' => $this->city->id,
+                'name' => $this->city->name,
+            ] : null,
             'lat' => (double)$this->lat,
             'lon' => (double)$this->lon,
             'full_address' => $this->full_address,
