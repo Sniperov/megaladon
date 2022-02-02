@@ -25,10 +25,10 @@ class CreateOrderRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'descrition' => ['required', 'string'],
+            'description' => ['required', 'string'],
             'category_id' => ['required', 'integer', 'exists:order_categories,id'],
-            'price_recommended' => ['nullable', 'float'],
-            'price_max' => ['nullable', 'float'],
+            'price_recommended' => ['nullable'],
+            'price_max' => ['nullable'],
             'files' => ['nullable', 'array'],
             'files.*' => ['nullable', 'file'],
         ];

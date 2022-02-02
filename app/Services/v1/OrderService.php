@@ -9,6 +9,7 @@ use App\Presenters\v1\OfferPresenter;
 use App\Presenters\v1\OrderPresenter;
 use App\Repositories\CommentRepo;
 use App\Repositories\OrderOfferRepo;
+use App\Repositories\OrderRepo;
 use App\Services\BaseService;
 
 class OrderService extends BaseService
@@ -16,7 +17,7 @@ class OrderService extends BaseService
     private OrderRepo $orderRepo;
 
     public function __construct() {
-        $this->orderRepo = new OrderRepo;
+        $this->orderRepo = new OrderRepo();
     }
 
     public function create(User $user, $data)
@@ -25,6 +26,15 @@ class OrderService extends BaseService
         $data['executor_id'] = 0;
         $data['status'] = Order::STATUS_MODERATE;
         $order = $this->orderRepo->store($data);
+
+        if (isset($data['files'])) {
+            foreach($data['files'] as $file) {
+                $path = $file->store('public/order/'.$order->id);
+                $order->media()->create([
+                    'storage_link' => $path, 
+                ]);
+            }
+        }
 
         return $this->result([
             'order' => (new OrderPresenter($order))->detail(),

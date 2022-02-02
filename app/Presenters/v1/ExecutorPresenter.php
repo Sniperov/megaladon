@@ -26,4 +26,16 @@ class ExecutorPresenter extends BasePresenter
             'full_address' => $this->full_address,
         ];
     }
+
+    public function short()
+    {
+        return [
+            'id' => $this->id,
+            'type' => !is_null($this->type) ? [
+                'id' =>  $this->type->id,
+                'name' => $this->type->name,
+            ] : null,
+            'name' => $this->name,
+        ];
+    }
 }

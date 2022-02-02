@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class MediaFiles extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['storage_link', 'active'];
+
+    public function mediable()
+    {
+        return $this->morphTo('mediable');
+    }
 }

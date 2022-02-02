@@ -17,13 +17,14 @@ class UserPresenter extends BasePresenter
         ];
     }
 
-    public function offer()
+    public function short()
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'photo_url' => url($this->photo_url),
-            'count_orders' => $this->count_orders,
-            'rating' => $this->rating,
+            // 'count_orders' => $this->count_orders,
+            // 'rating' => $this->rating,
         ];
     }
 }

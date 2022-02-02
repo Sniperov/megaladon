@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'status', 'user_id', 'executor_id'];
+    protected $fillable = ['title', 'description', 'category_id', 'status', 'user_id', 'executor_id'];
 
     const STATUS_MODERATE = 1;
     const STATUS_ACTIVE = 2;
@@ -19,7 +19,7 @@ class Order extends Model
 
     public function media()
     {
-        return $this->hasMany(MediaFiles::class);
+        return $this->morphMany(MediaFiles::class, 'mediable');
     }
 
     public function comments()
@@ -30,6 +30,21 @@ class Order extends Model
     public function offers()
     {
         return $this->hasMany(OrderOffer::class, 'order_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function executor()
+    {
+        return $this->belongsTo(Executor::class, 'executor_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(OrderCategory::class, 'id', 'category_id');
     }
 
     public function getStatusName() : string
@@ -47,5 +62,10 @@ class Order extends Model
                 return 'В архиве';
         }
         return '';
+    }
+
+    public function countOffers()
+    {
+        return $this->offers()->count();
     }
 }

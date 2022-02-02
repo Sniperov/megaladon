@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\Order;
+namespace App\Repositories;
 
+use App\Models\Order;
 use function GuzzleHttp\Promise\queue;
 
 class OrderRepo
