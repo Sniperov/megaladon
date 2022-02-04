@@ -14,7 +14,7 @@ class OrderRepo
 
     public function update(Order $order, array $data)
     {
-        return $order->update($data);
+        return Order::where('id', $order->id)->update($data);
     }
 
     public function index($params)

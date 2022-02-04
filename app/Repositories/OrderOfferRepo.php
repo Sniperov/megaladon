@@ -18,6 +18,13 @@ class OrderOfferRepo
             ->get();
     }
 
+    public function getByUserIdAndOrderId(int $orderId, int $userId)
+    {
+        return OrderOffer::where('order_id', $orderId)
+            ->where('user_id', $userId)
+            ->first();
+    }
+
     public function info($offerId)
     {
         return OrderOffer::with('user')

@@ -10,7 +10,7 @@ class UserPresenter extends BasePresenter
     {
         return [
             'name' => $this->name,
-            'photo_url' => url($this->photo_url),
+            'photo_url' => $this->photo_url ? url($this->photo_url) : null,
             'phone' => $this->phone,
             'executor' => $this->executor ? (new ExecutorPresenter($this->executor))->edited() : null,
             'store' => $this->store ? (new StorePresenter($this->store))->detail() : null,
@@ -22,7 +22,7 @@ class UserPresenter extends BasePresenter
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'photo_url' => url($this->photo_url),
+            'photo_url' => $this->photo_url ? url($this->photo_url) : null,
             // 'count_orders' => $this->count_orders,
             // 'rating' => $this->rating,
         ];

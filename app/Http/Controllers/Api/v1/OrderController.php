@@ -41,10 +41,4 @@ class OrderController extends ApiController
     {
         return $this->result($this->orderService->info($id));
     }
-    
-    public function commentOrder(CommentOrderRequest $request)
-    {
-        $data = $request->validated();
-        return $this->result($this->orderService->commentOrder($data));
-    }
 }

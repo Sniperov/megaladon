@@ -13,7 +13,7 @@ class OfferPresenter extends BasePresenter
             'description' => $this->description,
             'date' => $this->date,
             'price' => $this->price,
-            'user' => (new UserPresenter($this->user))->offer(),
+            'user' => (new UserPresenter($this->user))->short(),
         ];
     }
 
@@ -25,7 +25,7 @@ class OfferPresenter extends BasePresenter
             'date' => $this->date,
             'price' => $this->price,
             'expire_at' => $this->expire_at,
-            'user' => (new UserPresenter($this->user))->offer(),
+            'user' => (new UserPresenter($this->user))->short(),
         ];
     }
 }

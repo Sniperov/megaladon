@@ -14,7 +14,7 @@ class OrderOffer extends Model
         'user_id',
         'price',
         'date',
-        'description',
+        'comment',
     ];
 
     public function user()

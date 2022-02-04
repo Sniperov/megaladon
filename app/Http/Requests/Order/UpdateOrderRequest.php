@@ -26,6 +26,11 @@ class UpdateOrderRequest extends FormRequest
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'category_id' => ['nullable', 'integer', 'exists:order_categories,id'],
+            'price_recommended' => ['nullable'],
+            'price_max' => ['nullable'],
+            'files' => ['nullable', 'array'],
+            'files.*' => ['nullable', 'file'],
         ];
     }
 }

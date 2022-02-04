@@ -42,14 +42,22 @@ class OrderService extends BaseService
         ]);
     }
 
-    public function createOffer(User $user, array $data)
+    public function createOffer(User $user, array $data, int $orderId)
     {
         $offerRepo = new OrderOfferRepo();
+
+        $offer = $offerRepo->getByUserIdAndOrderId($orderId, $user->id);
+
+        if (!is_null($offer)) {
+            return $this->error(406, 'Вы уже откликались на этот заказ');
+        }
+
+        $data['order_id'] = $orderId;
         $data['user_id'] = $user->id;
 
-        return $this->result([
-            'orderOffer' => (new OfferPresenter($offerRepo->store($data)))->info(),
-        ]);
+        $offerRepo->store($data);
+
+        return $this->ok('Предложение отправленно');
     }
 
     public function update(int $id, array $data)
@@ -65,8 +73,20 @@ class OrderService extends BaseService
         if ($order->user_id != $user->id) {
             return $this->error(403, 'Вы не можете редактировать чужой заказ');
         }
+        $order->media()->delete();
+
+        if (isset($data['files'])) {
+            foreach($data['files'] as $file) {
+                $path = $file->store('public/order/'.$order->id);
+                $order->media()->create([
+                    'storage_link' => Storage::url($path), 
+                ]);
+            }
+        }
+        unset($data['files']);
 
         $this->orderRepo->update($order, $data);
+
         return $this->ok('Заказ сохранён');
     }
 
@@ -84,13 +104,16 @@ class OrderService extends BaseService
             return $this->errNotFound('Заказ не найден');
         }
         return $this->result([
-            'order' => (new OrderPresenter($order))->details(),
+            'order' => (new OrderPresenter($order))->detail(),
         ]);
     }
 
     public function getOffers($orderId): array
     {
         $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->error(401, 'Unauthorized');
+        }
         $order = Order::find($orderId);
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');

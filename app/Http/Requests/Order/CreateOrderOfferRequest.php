@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +24,6 @@ class CreateOrderOfferRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_id' => 'required|string|exists:orders,id',
             'price' => 'required|string|max:255',
             'date' => 'required|string|max:255',
             'comment' => 'nullable|string',

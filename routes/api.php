@@ -61,9 +61,9 @@ Route::group(['guard' => 'api'], function () {
         Route::get('/', [OrderController::class, 'index']);
         Route::post('/create', [OrderController::class, 'store']);
         Route::get('/{id}', [OrderController::class, 'info']);
-        Route::put('/{id}/update', [OrderController::class, 'update']);
+        Route::post('/{id}/update', [OrderController::class, 'update']);
         Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
-        Route::get('/{id}/offer', [OrderOfferController::class, 'getOffers']);
+        Route::get('/{id}/offer', [OrderOfferController::class, 'orderOffers']);
         Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
     });
 
