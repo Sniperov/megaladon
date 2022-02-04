@@ -35,6 +35,7 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/confirm-code', [AuthController::class, 'confirmCode']);
+        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
         
         Route::group(['middleware' => 'api'], function () {
             // Route::post('/send-code', [AuthController::class, 'sendCode']);
@@ -45,7 +46,7 @@ Route::group(['guard' => 'api'], function () {
     });
 
     Route::group(['prefix' => 'user', 'middleware' => 'api'], function () {
-        Route::get('/{id}', [UserController::class, 'profile']);
+        Route::post('/change-password', [UserController::class,'changePassword']);
         Route::put('/store', [StoreController::class, 'updateProfile']);
         Route::put('/executor', [ExecutorController::class, 'update']);
         Route::post('/update-photo', [UserController::class, 'updatePhoto']);
@@ -53,6 +54,7 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/change-phone/end', [UserController::class, 'endChangePhone']);
         Route::post('/change-token', [UserController::class, 'updateToken']);
         Route::delete('/disable-notifications', [UserController::class, 'disableNotifications']);
+        Route::get('/{id}', [UserController::class, 'profile']);
     });
 
     Route::group(['prefix' => 'order', 'middleware' => 'api'], function () {

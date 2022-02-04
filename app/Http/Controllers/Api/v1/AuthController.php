@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\SendCodeRequest;
 use App\Http\Requests\Auth\ExecutorRegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\StoreRegistrationRequest;
 use App\Services\v1\AuthService;
 use App\Services\v1\PhoneConfirmationService;
@@ -56,6 +57,11 @@ class AuthController extends ApiController
     {
         $user = $this->authUser();
         return $this->result((new PhoneConfirmationService())->sendCode($user, $user->phone));
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        return $this->result($this->authService->resetPassword($request->validated()));
     }
 
     public function logout()

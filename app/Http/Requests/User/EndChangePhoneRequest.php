@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,6 +25,7 @@ class EndChangePhoneRequest extends FormRequest
     {
         return [
             'code' => ['required', 'string'],
+            'phone' => ['required', 'string', 'starts_with:+'],
         ];
     }
 }

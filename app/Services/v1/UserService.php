@@ -40,24 +40,27 @@ class UserService extends BaseService
         }
         return $this->result(['user' => (new UserPresenter($user))->profile()]);
     }
-    
-    public function resetPassword(User $user)
-    {
-        $newPassword = Str::random(8);
-        //send sms with password
-        $this->userRepo->update($user->id, ['password' => Hash::make($newPassword)]);
-        return $this->ok();
-    }
 
     public function startChangePhone($data)
     {
         $user = $this->apiAuthUser();
         if (!Hash::check($data['password'], $user->password)) {
-            return $this->error(401, 'Не верный номер телефона');
+            return $this->error(401, 'Введен неверный пароль');
         }
         (new PhoneConfirmationService())->sendCode($user, $data['new_phone']);
 
         return $this->ok();
+    }
+
+    public function changePassword(User $user, array $data)
+    {
+        if (!Hash::check($data['old_password'], $user->password)) {
+            return $this->error(401, 'Введен неверный пароль');
+        }
+
+        $this->userRepo->update($user->id, ['password' => Hash::make($data['password'])]);
+
+        return $this->ok('Пароль был успешно изменён');
     }
 
     public function endChangePhone($data)

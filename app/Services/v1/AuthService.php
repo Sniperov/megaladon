@@ -11,6 +11,7 @@ use App\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
+use Illuminate\Support\Str;
 
 class AuthService extends BaseService
 {
@@ -119,6 +120,20 @@ class AuthService extends BaseService
             'token' => $token,
             'user' => $user,
         ]);
+    }
+
+    public function resetPassword(array $data)
+    {
+        $user = $this->userRepo->getUserByPhone($data['phone']);
+        if (is_null($user)) {
+            return $this->errNotFound('Пользователь с таким паролем не существует');
+        }
+
+        $newPassword = Str::random(10);
+        //TODO: Сделать отправку по смс
+        $this->userRepo->update($user->id, ['password' => Hash::make($newPassword)]);
+
+        return $this->ok('Смс с паролем было высланно на указанный номер');
     }
 
     public function logout()

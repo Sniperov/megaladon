@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Requests\EndChangePhoneRequest;
+use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\ChangePhoneRequest;
+use App\Http\Requests\User\EndChangePhoneRequest;
 use App\Http\Requests\User\GetProfileRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Requests\User\UpdateTokenRequest;
@@ -40,17 +41,17 @@ class UserController extends ApiController
         return $this->result($response);
     }
 
-    public function resetPassword()
-    {
-        $response = $this->userService->resetPassword($this->authUser());
-        return $this->result($response);
-    }
-
     public function startChangePhone(ChangePhoneRequest $request)
     {
         $data = $request->validated();
         $response = $this->userService->startChangePhone($data);
         return $this->result($response);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $data = $request->validated();
+        return $this->result($this->userService->changePassword($this->authUser(), $data));
     }
 
     public function endChangePhone(EndChangePhoneRequest $request)
