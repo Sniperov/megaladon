@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\{
+    AdvertController,
     ExecutorController,
     OrderOfferController,
     UserController, 
@@ -59,12 +60,26 @@ Route::group(['guard' => 'api'], function () {
 
     Route::group(['prefix' => 'order', 'middleware' => 'api'], function () {
         Route::get('/', [OrderController::class, 'index']);
-        Route::post('/create', [OrderController::class, 'store']);
         Route::get('/{id}', [OrderController::class, 'info']);
-        Route::post('/{id}/update', [OrderController::class, 'update']);
-        Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
-        Route::get('/{id}/offer', [OrderOfferController::class, 'orderOffers']);
-        Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
+
+        Route::group(['middleware' => 'api'], function () {
+            Route::post('/create', [OrderController::class, 'store']);
+            Route::post('/{id}/update', [OrderController::class, 'update']);
+            Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
+            Route::get('/{id}/offer', [OrderOfferController::class, 'orderOffers']);
+            Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
+        });
+    });
+
+    Route::group(['prefix' => 'adverts'], function() {
+        Route::get('/', [AdvertController::class, 'index']);
+        Route::get('/{id}', [AdvertController::class, 'info']);
+
+        Route::group(['middleware' => 'api'], function () {
+            Route::post('/', [AdvertController::class, 'create']);
+            Route::post('/{id}/update', [AdvertController::class, 'update']);
+            Route::delete('/{id}/delete', [AdvertController::class, 'delete']);
+        });
     });
 
     Route::group(['prefix' => 'store', 'middleware' => 'api'], function() {
