@@ -24,13 +24,16 @@ class UpdateStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'type_id' => ['nullable', 'integer', 'exists:store_types,id'],
-            'name' => ['nullable', 'string', 'max:255'],
-            'bin' => ['nullable', 'string'],
+            'type_id' => ['nullable', 'integer', 'exists:company_types,id'],
+            'name' => ['nullable', 'string', 'min:3'],
+            'bin' => ['nullable', 'string', 'min:12', 'max:13'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'lat' => ['nullable', 'numeric'],
             'lon' => ['nullable', 'numeric'],
-            'full_address' => ['nullable', 'string'],
+            'full_address' => ['nullable', 'string', 'max:255'],
+            'contacts.*.type' => ['nullable', 'in:site,email,phone,home_phone', 'string'],
+            'contacts.*.contact_name' => ['nullable_if:contacts.type,phone,home_phone', 'string', 'min:2', 'max:20'],
+            'contacts.*.value' => ['nullable', 'string'],
         ];
     }
 }

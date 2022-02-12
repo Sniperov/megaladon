@@ -9,6 +9,7 @@ class MediaFilePresenter extends BasePresenter
     public function list()
     {
         return [
+            'id' => $this->id,
             'url' => url($this->storage_link),
             'active' => (boolean)$this->active
         ];

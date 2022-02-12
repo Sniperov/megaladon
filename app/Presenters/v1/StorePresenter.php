@@ -24,6 +24,7 @@ class StorePresenter extends BasePresenter
             'full_address' => $this->full_address,
             'photo_url' => $this->photo_url,
             'contacts' => $this->presentCollections($this->contacts, StoreContactsPresenter::class, 'info'),
+            'prices' => $this->presentCollections($this->media, MediaFilePresenter::class, 'list'),
         ];
     }
 

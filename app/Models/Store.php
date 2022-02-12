@@ -39,4 +39,9 @@ class Store extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function media()
+    {
+        return $this->morphMany(MediaFiles::class, 'mediable');
+    }
 }

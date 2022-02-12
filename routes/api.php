@@ -84,6 +84,12 @@ Route::group(['guard' => 'api'], function () {
 
     Route::group(['prefix' => 'store', 'middleware' => 'api'], function() {
         Route::get('/', [StoreController::class, 'index']);
+        Route::get('/{id}', [StoreController::class, 'info']);
+        Route::put('/update', [StoreController::class, 'updateProfile']);
+        Route::post('/price', [StoreController::class, 'uploadPrice']);
+        Route::post('/price/{id}/activate', [StoreController::class, 'activatePrice']);
+        Route::post('/price/{id}/deactivate', [StoreController::class, 'deactivatePrice']);
+        Route::delete('/price/{id}/delete', [StoreController::class, 'deletePrice']);
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => 'api'], function () {

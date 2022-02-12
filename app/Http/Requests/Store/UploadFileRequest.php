@@ -4,7 +4,7 @@ namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexStoreRequest extends FormRequest
+class UploadFileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class IndexStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth('api')->check();
     }
 
     /**
@@ -24,11 +24,7 @@ class IndexStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'rowsPerPage' => ['nullable', 'integer'],
-            'startRow' => ['nullable', 'integer'],
-            'type_id' => ['nullable', 'integer', 'exists:company_types,id'],
-            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
-            'name' => ['nullable', 'string'],
+            'file' => ['required', 'file', 'mimes:pdf'],
         ];
     }
 }

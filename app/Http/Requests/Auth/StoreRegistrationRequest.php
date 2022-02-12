@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,14 +24,15 @@ class StoreRegistrationRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => ['required', 'integer', 'exists:organization_types,id'],
+            'type_id' => ['required', 'integer', 'exists:company_types,id'],
             'name' => ['required', 'string', 'min:3'],
             'bin' => ['required', 'string', 'min:12', 'max:13'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
             'lat' => ['required', 'numeric'],
             'lon' => ['required', 'numeric'],
+            'full_address' => ['required', 'string', 'max:255'],
             'contacts.*.type' => ['required', 'in:site,email,phone,home_phone', 'string'],
-            'contacts.*.name' => ['required_if:contacts.type,phone,home_phone', 'string', 'min:2', 'max:20'],
+            'contacts.*.contact_name' => ['required_if:contacts.type,phone,home_phone', 'string', 'min:2', 'max:20'],
             'contacts.*.value' => ['required', 'string'],
         ];
     }

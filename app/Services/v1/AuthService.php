@@ -88,11 +88,22 @@ class AuthService extends BaseService
     {
         $user = $this->apiAuthUser();
         if (is_null($user)) {
-            return $this->error(403, 'Auth error');
+            return $this->error(403, 'Unauthorized');
         }
+
+        $storeRepo = new StoreRepo();
+        if (!is_null($storeRepo->getByUserId($user->id))) {
+            return $this->error(406, 'У вас уже есть зарегистрированный магазин');
+        }
+
         $data['user_id'] = $user->id;
 
         $store = (new StoreRepo())->store($data);
+
+        foreach ($data['contacts'] as $contactData) {
+            $contactData['store_id'] = $store->id;
+            $store->contacts()->create($contactData);
+        }
 
         return $this->result([
             'user' => $user,
