@@ -2,12 +2,16 @@
 
 namespace App\Services\v1;
 
+use App\Events\ExecutorRatedEvent;
 use App\Http\Requests\Order\CommentOrderRequest;
+use App\Models\Executor;
 use App\Models\Order;
+use App\Models\OrderOffer;
 use App\Models\User;
 use App\Presenters\v1\OfferPresenter;
 use App\Presenters\v1\OrderPresenter;
 use App\Repositories\CommentRepo;
+use App\Repositories\ExecutorRepo;
 use App\Repositories\OrderOfferRepo;
 use App\Repositories\OrderRepo;
 use App\Services\BaseService;
@@ -130,10 +134,14 @@ class OrderService extends BaseService
 
     public function infoOffer($orderId, $offerId)
     {
-        $user = $this->apiAuthUser();
         $order = Order::find($orderId);
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
+        }
+
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
         }
 
         if ($order->user_id != $user->id) {
@@ -146,5 +154,115 @@ class OrderService extends BaseService
         return $this->result([
             'offer' => (new OfferPresenter($offer))->info(),
         ]);
+    }
+
+    public function delete(int $orderId)
+    {
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
+        }
+
+        if ($order->user_id != $user->id) {
+            return $this->error(406, 'Вы не можете удалить чужой заказ');
+        }
+
+        $this->orderRepo->update($order, ['status' => Order::STATUS_ARCHIVE]);
+
+        return $this->ok();
+    }
+
+    public function complete(int $orderId)
+    {
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
+        }
+
+        if ($order->user_id != $user->id) {
+            return $this->error(406, 'Вы не можете завершить чужой заказ');
+        }
+
+        if ($order->status !== Order::STATUS_HAS_EXECUTOR) {
+            return $this->error(406, 'Чтобы завершить заказ он должен иметь статус "В работе"');
+        }
+
+        $this->orderRepo->update($order, ['status' => Order::STATUS_COMPLETED]);
+
+        return $this->ok();
+    }
+
+    public function accept(int $orderId, int $offerId)
+    {
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
+        }
+        
+        $offer = OrderOffer::find($offerId);
+        if (is_null($offer)) {
+            return $this->errNotFound('Предложение не найдено');
+        }
+
+        if ($order->user_id != $user->id) {
+            return $this->error(406, 'Вы не можете принять предложение чужого заказа');
+        }
+
+        $this->orderRepo->update($order, [
+            'status' => Order::STATUS_HAS_EXECUTOR,
+            'executor_id' => $offer->user_id,
+        ]);
+
+        return $this->ok();
+    }
+
+    public function rateExecutor(int $orderId, float $rate)
+    {
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+        
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
+        }
+
+        if ($order->user_id != $user->id) {
+            return $this->error(406, 'Вы не можете оценить исполнителя чужого заказа');
+        }
+        
+        if ($order->status !== Order::STATUS_COMPLETED) {
+            return $this->error(406, 'Вы пока не можете оценить исполнителя');
+        }
+
+        $executor = Executor::find($order->executor_id);
+        if (is_null($executor)) {
+            return $this->errNotFound('Исполнитель не найден');
+        }
+
+        $executor->rating()->create([
+            'user_id' => $user->id,
+            'rate' => $rate,
+        ]);
+
+        event(new ExecutorRatedEvent($executor));
+
+        return $this->ok();
     }
 }

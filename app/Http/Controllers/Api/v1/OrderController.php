@@ -7,6 +7,7 @@ use App\Http\Requests\Order\{
     CommentOrderRequest,
     CreateOrderRequest,
     IndexOrderRequest,
+    RateOrderRequest,
     UpdateOrderRequest,
 };
 use App\Services\v1\OrderService;
@@ -40,5 +41,21 @@ class OrderController extends ApiController
     public function info($id)
     {
         return $this->result($this->orderService->info($id));
+    }
+
+    public function delete($id)
+    {
+        return $this->result($this->orderService->delete($id));
+    }
+
+    public function complete($id)
+    {
+        return $this->result($this->orderService->complete($id));
+    }
+
+    public function rate(RateOrderRequest $request, $id)
+    {
+        $data = $request->validated();
+        return $this->result($this->orderService->rateExecutor($id, $data['rate']));
     }
 }

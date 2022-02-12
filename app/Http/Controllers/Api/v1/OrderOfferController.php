@@ -31,4 +31,9 @@ class OrderOfferController extends ApiController
     {
         return $this->result($this->orderService->infoOffer($id, $offerId));
     }
+
+    public function accept($id, $offerId)
+    {
+        return $this->result($this->orderService->accept($id, $offerId));
+    }
 }

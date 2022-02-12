@@ -65,9 +65,13 @@ Route::group(['guard' => 'api'], function () {
         Route::group(['middleware' => 'api'], function () {
             Route::post('/create', [OrderController::class, 'store']);
             Route::post('/{id}/update', [OrderController::class, 'update']);
+            Route::delete('/{id}/delete', [OrderController::class, 'delete']);
+            Route::post('/{id}/complete', [OrderController::class, 'complete']);
+            Route::post('/{id}/rate', [OrderController::class, 'rate']);
             Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
             Route::get('/{id}/offer', [OrderOfferController::class, 'orderOffers']);
             Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
+            Route::post('/{id}/offer/{offerId}', [OrderOfferController::class, 'accept']);
         });
     });
 
@@ -85,6 +89,7 @@ Route::group(['guard' => 'api'], function () {
     Route::group(['prefix' => 'store', 'middleware' => 'api'], function() {
         Route::get('/', [StoreController::class, 'index']);
         Route::get('/{id}', [StoreController::class, 'info']);
+        Route::post('/{id}/rate', [StoreController::class, 'rate']);
         Route::put('/update', [StoreController::class, 'updateProfile']);
         Route::post('/price', [StoreController::class, 'uploadPrice']);
         Route::post('/price/{id}/activate', [StoreController::class, 'activatePrice']);

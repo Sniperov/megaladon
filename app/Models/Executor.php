@@ -18,6 +18,7 @@ class Executor extends Model
         'lat',
         'lon',
         'full_address',
+        'rating',
     ];
 
     public function services()
@@ -38,5 +39,10 @@ class Executor extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function rating()
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }

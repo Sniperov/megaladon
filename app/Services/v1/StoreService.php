@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use App\Events\StoreRatedEvent;
 use App\Models\Store;
 use App\Models\User;
 use App\Presenters\v1\StorePresenter;
@@ -144,5 +145,45 @@ class StoreService extends BaseService
         $store->media()->where('id', $id)->delete();
 
         return $this->ok();
+    }
+
+    public function rateStore(int $storeId, float $rate)
+    {
+        $store = Store::find($storeId);
+        if (is_null($store)) {
+            return $this->errNotFound('Магазин не найден');
+        }
+
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Требуется авторизация');
+        }
+
+        if ($store->user_id == $user->id) {
+            return $this->error(406, 'Вы не можете оценить свой магазин');
+        }
+
+        $store->rating()->create([
+            'user_id' => $user->id,
+            'rate' => $rate,
+        ]);
+
+        event(new StoreRatedEvent($store));
+
+        return $this->ok();
+    }
+
+    public function updateRating(Store $store) : void
+    {
+        $ratings = $store->rating()->get();
+        
+        $sumRating = 0;
+        foreach ($ratings as $rating) {
+            $sumRating += $rating->rate;
+        }
+
+        $countRates = $store->rating()->count();
+
+        $this->storeRepo->update($store->id, ['rating' => round($sumRating / $countRates, 1)]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Store\IndexStoreRequest;
+use App\Http\Requests\Store\RateStoreRequest;
 use App\Http\Requests\Store\UpdateStoreRequest;
 use App\Http\Requests\Store\UploadFileRequest;
 use App\Services\v1\StoreService;
@@ -53,5 +54,11 @@ class StoreController extends ApiController
     public function deletePrice($id)
     {
         return $this->result($this->storeService->deletePrice($id));
+    }
+
+    public function rate(RateStoreRequest $request, $id)
+    {
+        $data = $request->validated();
+        return $this->result($this->storeService->rateStore($id, $data['rate']));
     }
 }

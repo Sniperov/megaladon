@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\ExecutorRatedEvent;
+use App\Events\StoreRatedEvent;
+use App\Listeners\ExecutorRatedListener;
+use App\Listeners\StoreRatedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +21,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        ExecutorRatedEvent::class => [
+            ExecutorRatedListener::class,
+        ],
+
+        StoreRatedEvent::class => [
+            StoreRatedListener::class,
         ],
     ];
 

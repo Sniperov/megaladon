@@ -18,6 +18,7 @@ class Store extends Model
         'lat',
         'lon',
         'full_address',
+        'rating',
     ];
 
     public function contacts()
@@ -43,5 +44,10 @@ class Store extends Model
     public function media()
     {
         return $this->morphMany(MediaFiles::class, 'mediable');
+    }
+
+    public function rating()
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }
