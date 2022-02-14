@@ -12,6 +12,7 @@ class UserPresenter extends BasePresenter
             'name' => $this->name,
             'photo_url' => $this->photo_url ? url($this->photo_url) : null,
             'phone' => $this->phone,
+            'city' => $this->city ? (new CityPresenter($this->city))->list() : null,
             'executor' => $this->executor ? (new ExecutorPresenter($this->executor))->edited() : null,
             'store' => $this->store ? (new StorePresenter($this->store))->detail() : null,
         ];

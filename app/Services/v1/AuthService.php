@@ -3,6 +3,9 @@
 namespace App\Services\v1;
 
 use App\Models\User;
+use App\Presenters\v1\ExecutorPresenter;
+use App\Presenters\v1\StorePresenter;
+use App\Presenters\v1\UserPresenter;
 use App\Repositories\ExecutorRepo;
 use App\Repositories\PhoneConfirmationRepo;
 use App\Repositories\StoreRepo;
@@ -38,7 +41,7 @@ class AuthService extends BaseService
 
         return $this->result([
             'token' => $token,
-            'user' => $user,
+            'user' => (new UserPresenter($user))->profile(),
         ]);
     }
 
