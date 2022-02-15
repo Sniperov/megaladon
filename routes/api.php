@@ -58,7 +58,7 @@ Route::group(['guard' => 'api'], function () {
         Route::get('/{id}', [UserController::class, 'profile']);
     });
 
-    Route::group(['prefix' => 'order', 'middleware' => 'api'], function () {
+    Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index']);
         Route::get('/{id}', [OrderController::class, 'info']);
 
