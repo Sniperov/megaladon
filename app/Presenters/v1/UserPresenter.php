@@ -9,6 +9,7 @@ class UserPresenter extends BasePresenter
     public function profile()
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'photo_url' => $this->photo_url ? url($this->photo_url) : null,
             'phone' => $this->phone,
