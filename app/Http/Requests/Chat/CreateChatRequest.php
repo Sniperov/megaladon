@@ -4,7 +4,7 @@ namespace App\Http\Requests\Chat;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SendMessageRequest extends FormRequest
+class CreateChatRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class SendMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => ['required_without:file', 'string'],
-            'file' => ['required_without:message', 'file'],
-            'chat_id' => ['required', 'string', 'exists:chats,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id']
         ];
     }
 }

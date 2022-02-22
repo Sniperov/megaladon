@@ -38,6 +38,12 @@ class OrderController extends ApiController
         return $this->result($this->orderService->index($params));
     }
 
+    public function indexMy(IndexOrderRequest $request)
+    {
+        $params = $request->validated();
+        return $this->result($this->orderService->indexMy($params));
+    }
+
     public function info($id)
     {
         return $this->result($this->orderService->info($id));
@@ -57,5 +63,10 @@ class OrderController extends ApiController
     {
         $data = $request->validated();
         return $this->result($this->orderService->rateExecutor($id, $data['rate']));
+    }
+
+    public function createChat($id)
+    {
+        return $this->result($this->orderService->createChat($id));
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Executor;
 use App\Models\Order;
 use App\Models\OrderOffer;
 use App\Models\User;
+use App\Presenters\v1\ExecutorPresenter;
 use App\Presenters\v1\OfferPresenter;
 use App\Presenters\v1\OrderPresenter;
 use App\Repositories\CommentRepo;
@@ -98,6 +99,17 @@ class OrderService extends BaseService
     {
         $orders = $this->orderRepo->index($params);
 
+        return $this->resultCollections($orders, OrderPresenter::class, 'list');
+    }
+
+    public function indexMy(array $params)
+    {
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Ошибка авторизации');
+        }
+        $params['user_id'] = $user->id;
+        $orders = $this->orderRepo->index($params);
         return $this->resultCollections($orders, OrderPresenter::class, 'list');
     }
 
@@ -262,6 +274,30 @@ class OrderService extends BaseService
         ]);
 
         event(new ExecutorRatedEvent($executor));
+
+        return $this->ok();
+    }
+
+    public function createChat(int $orderId)
+    {
+        $order = Order::find($orderId);
+        if (is_null($order)) {
+            return $this->errNotFound('Заказ не найден');
+        }
+
+        if ($order->status !== Order::STATUS_HAS_EXECUTOR) {
+            return $this->error(406, 'Вы не можете создать чат без исполнителя');
+        }
+
+        $iniciator = $this->apiAuthUser();
+        if (is_null($iniciator)) {
+            return $this->errFobidden('Ошибка авторизации');
+        }
+
+        $order->chatable()->create([
+            'iniciator_id' => $iniciator->id,
+            'user_id' => $order->executor_id,
+        ]);
 
         return $this->ok();
     }

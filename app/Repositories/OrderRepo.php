@@ -22,6 +22,7 @@ class OrderRepo
         $query = Order::query();
         $query = $this->applyFilterQuery($query, $params);           
         $query = $this->applyPaginationQuery($query, $params);
+        $query = $this->applySortBy($query, $params);
         return $query->get();
     }
 
@@ -32,7 +33,11 @@ class OrderRepo
         }
 
         if (isset($params['status'])) {
-            $query->whereIn('status', $params['status']);
+            $query->where('status', $params['status']);
+        }
+
+        if (isset($params['user_id'])) {
+            $query->where('user_id', $params['user_id']);
         }
 
         return $query;
@@ -48,6 +53,21 @@ class OrderRepo
         } else {
             $query->take(100);
         }
+        return $query;
+    }
+
+    public function applySortBy($query, $params)
+    {
+        $desc = 'ASC';
+
+        if (isset($params['desc'])) {
+            $desc = (boolean)$params['desc'] ? 'DESC' : 'ASC';
+        }
+
+        if (isset($params['sortBy'])) {
+            $query->orderBy($params['sortBy'], $desc);
+        }
+
         return $query;
     }
 }

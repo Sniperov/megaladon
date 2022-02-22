@@ -25,8 +25,10 @@ class IndexOrderRequest extends FormRequest
     {
         return [
             'category' => ['nullable', 'integer', 'exists:order_categories,id'],
-            'status' => ['nullable', 'array'],
-            'status.*' => ['required_with:status', 'integer'],
+            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
+            'status' => ['nullable', 'integer'],
+            'sortBy' => ['nullable', 'string'],
+            'desc' => ['nullable', 'boolean'],
             'startRow' => ['nullable', 'integer'],
             'rowsPerPage' => ['nullable', 'integer']
         ];

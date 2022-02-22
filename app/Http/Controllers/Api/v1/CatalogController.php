@@ -19,4 +19,9 @@ class CatalogController extends ApiController
         $response = (new CatalogService())->orderCategories();
         return $this->result($response);
     }
+
+    public function productCategories()
+    {
+        return $this->result((new CatalogService())->productCategories());
+    }
 }

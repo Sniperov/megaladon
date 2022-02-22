@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\v1\{
     ProductCategoryController,
     StoreController,
 };
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['guard' => 'api'], function () {
     Route::get('/cities', [CatalogController::class, 'cities']);
     Route::get('/order-categories', [CatalogController::class, 'orderCategories']);
-    Route::get('/product-categories', [ProductCategoryController::class, 'index']);
+    Route::get('/product-categories', [CatalogController::class, 'productCategories']);
     
     Route::group(['prefix' => '/auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -60,9 +59,9 @@ Route::group(['guard' => 'api'], function () {
 
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index']);
-        Route::get('/{id}', [OrderController::class, 'info']);
 
         Route::group(['middleware' => 'api'], function () {
+            Route::get('/my', [OrderController::class, 'indexMy']);
             Route::post('/create', [OrderController::class, 'store']);
             Route::post('/{id}/update', [OrderController::class, 'update']);
             Route::delete('/{id}/delete', [OrderController::class, 'delete']);
@@ -73,6 +72,7 @@ Route::group(['guard' => 'api'], function () {
             Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
             Route::post('/{id}/offer/{offerId}', [OrderOfferController::class, 'accept']);
         });
+        Route::get('/{id}', [OrderController::class, 'info']);
     });
 
     Route::group(['prefix' => 'adverts'], function() {
@@ -95,6 +95,11 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/price/{id}/activate', [StoreController::class, 'activatePrice']);
         Route::post('/price/{id}/deactivate', [StoreController::class, 'deactivatePrice']);
         Route::delete('/price/{id}/delete', [StoreController::class, 'deletePrice']);
+    });
+
+    Route::group(['prefix' => 'executor', 'middleware' => 'api'], function () {
+        Route::get('/favorite', [ExecutorController::class, 'indexMy']);
+        Route::post('/favorite', [ExecutorController::class, 'addToFavorites']);
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => 'api'], function () {

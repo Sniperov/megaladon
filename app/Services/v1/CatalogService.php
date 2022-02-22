@@ -3,6 +3,7 @@
 namespace App\Services\v1;
 
 use App\Models\OrderCategory;
+use App\Models\ProductCategory;
 use App\Presenters\v1\OrderCategoryPresenter;
 use App\Services\BaseService;
 
@@ -12,5 +13,11 @@ class CatalogService extends BaseService
     {
         $categories = OrderCategory::with('child')->where('parent_id', 0)->get();
         return $this->resultCollections($categories, OrderCategoryPresenter::class, 'list');
+    }
+
+    public function productCategories()
+    {
+        $productCategories = ProductCategory::with('child')->where('parent_id', 0)->get();
+        return $this->resultCollections($productCategories, OrderCategoryPresenter::class, 'list');
     }
 }

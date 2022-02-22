@@ -17,7 +17,7 @@ class CreateChatMessagesTable extends Migration
             $table->id();
             $table->bigInteger('chat_id')->index();
             $table->bigInteger('user_id')->index();
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

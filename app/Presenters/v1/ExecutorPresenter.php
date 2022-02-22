@@ -12,7 +12,7 @@ class ExecutorPresenter extends BasePresenter
             'id' => $this->id,
             'type' => !is_null($this->type) ? [
                 'id' =>  $this->type->id,
-                'name' => $this->type->name,
+                'name' => $this->type->title,
             ] : null,
             'services' => $this->presentCollections($this->services, ServiceTypePresenter::class, 'list'),
             "city" => !is_null($this->city) ? [
@@ -24,6 +24,7 @@ class ExecutorPresenter extends BasePresenter
             'lat' => $this->lat,
             'lon' => $this->lon,
             'full_address' => $this->full_address,
+            'rating' => $this->rating ?? null,
         ];
     }
 
@@ -33,9 +34,10 @@ class ExecutorPresenter extends BasePresenter
             'id' => $this->id,
             'type' => !is_null($this->type) ? [
                 'id' =>  $this->type->id,
-                'name' => $this->type->name,
+                'name' => $this->type->title,
             ] : null,
             'name' => $this->name,
+            'rating' => $this->rating
         ];
     }
 }

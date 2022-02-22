@@ -3,8 +3,11 @@
 namespace App\Services\v1;
 
 use App\Models\Executor;
+use App\Models\Order;
 use App\Presenters\v1\ExecutorPresenter;
+use App\Presenters\v1\FavoritePresenter;
 use App\Repositories\ExecutorRepo;
+use App\Repositories\FavoriteRepo;
 use App\Services\BaseService;
 
 class ExecutorService extends BaseService
@@ -48,5 +51,31 @@ class ExecutorService extends BaseService
         $countRates = $executor->rating()->count();
 
         $this->executorRepo->update($executor->user_id, ['rating' => round($sumRating / $countRates, 1)]);
+    }
+
+    public function indexMy()
+    {
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Ошибка авторизации');
+        }
+
+        $favorites = (new FavoriteRepo())->indexMy($user->id);
+
+        return $this->resultCollections($favorites, FavoritePresenter::class, 'list');
+    }
+
+    public function addToFavorites(array $data)
+    {
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
+            return $this->errFobidden('Ошибка авторизации');
+        }
+
+        $data['user_id'] = $user->id;
+
+        (new FavoriteRepo())->store($data);
+
+        return $this->ok('Исполнитель добавлен в избранные');
     }
 }

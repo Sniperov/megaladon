@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Executor\ExecutorUpdateRequest;
+use App\Http\Requests\Executor\FavoriteExecutorRequest;
 use App\Services\v1\ExecutorService;
 use Illuminate\Http\Request;
 
@@ -19,5 +20,16 @@ class ExecutorController extends ApiController
     {
         $data = $request->validated();
         return $this->result($this->executorService->update($data));
+    }
+
+    public function indexMy()
+    {
+        return $this->result($this->executorService->indexMy());
+    }
+
+    public function addToFavorites(FavoriteExecutorRequest $request)
+    {
+        $data = $request->validated();
+        return $this->result($this->executorService->addToFavorites($data));
     }
 }

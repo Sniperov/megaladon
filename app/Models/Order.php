@@ -22,6 +22,11 @@ class Order extends Model
         return $this->morphMany(MediaFiles::class, 'mediable');
     }
 
+    public function chatable()
+    {
+        return $this->morphOne(Chat::class, 'chatable');
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class, 'order_id');

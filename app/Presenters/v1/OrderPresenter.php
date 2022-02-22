@@ -37,6 +37,16 @@ class OrderPresenter extends BasePresenter
             'user' => $this->user ? (new UserPresenter($this->user))->short() : null,
             'executor' => $this->executor ? (new ExecutorPresenter($this->executor))->short() : null,
             'files' => $this->media ? $this->presentCollections($this->media, MediaFilePresenter::class, 'list') : [],
+            'created_at' => date('d.m.Y', strtotime($this->created_at)),
+        ];
+    }
+
+    public function short()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'created_at' => date('d.m.Y', strtotime($this->created_at)),
         ];
     }
 }
