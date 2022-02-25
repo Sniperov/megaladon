@@ -27,6 +27,7 @@ class IndexAdvertsRequest extends FormRequest
             'category' => ['nullable', 'integer'],
             'price_min' => ['nullable', 'numeric'],
             'price_max' => ['nullable', 'numeric'],
+            'last' => ['nullable', 'string'],
             'city_id' => ['nullable', 'integer'],
             'startRow' => ['nullable', 'integer'],
             'rowsPerPage' => ['nullable', 'integer']

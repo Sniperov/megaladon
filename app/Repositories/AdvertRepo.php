@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Advert;
+use Carbon\Carbon;
 
 class AdvertRepo
 {
@@ -47,6 +48,18 @@ class AdvertRepo
 
         if(isset($params['price_max'])) {
             $query->where('price', '<', $params['price_max']);
+        }
+
+        if (isset($params['last'])) {
+            if ($params['last'] == 'last3day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(3)->toDateTimeString());
+            }
+            if ($params['last'] == 'last7day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(7)->toDateTimeString());
+            }
+            if ($params['last'] == 'last30day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(30)->toDateTimeString());
+            }
         }
 
         return $query;

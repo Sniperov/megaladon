@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use Carbon\Carbon;
+
 use function GuzzleHttp\Promise\queue;
 
 class OrderRepo
@@ -38,6 +40,18 @@ class OrderRepo
 
         if (isset($params['user_id'])) {
             $query->where('user_id', $params['user_id']);
+        }
+
+        if (isset($params['last'])) {
+            if ($params['last'] == 'last3day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(3)->toDateTimeString());
+            }
+            if ($params['last'] == 'last7day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(7)->toDateTimeString());
+            }
+            if ($params['last'] == 'last30day') {
+                $query->where('created_at', '>', Carbon::now()->subDays(30)->toDateTimeString());
+            }
         }
 
         return $query;
