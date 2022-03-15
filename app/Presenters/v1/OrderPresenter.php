@@ -33,6 +33,8 @@ class OrderPresenter extends BasePresenter
                 'id' => $this->category->id,
                 'title' => $this->category->title, 
             ] : null,
+            'price_max' => $this->price_max,
+            'price_recommended' => $this->price_recommended,
             'city' => (new CityPresenter($this->city))->list(),
             'user' => $this->user ? (new UserPresenter($this->user))->short() : null,
             'executor' => $this->executor ? (new ExecutorPresenter($this->executor))->short() : null,
