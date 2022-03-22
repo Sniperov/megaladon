@@ -10,10 +10,6 @@ class ExecutorPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
-            'type' => !is_null($this->type) ? [
-                'id' =>  $this->type->id,
-                'name' => $this->type->title,
-            ] : null,
             'services' => $this->presentCollections($this->services, ServiceTypePresenter::class, 'list'),
             "city" => !is_null($this->city) ? [
                 'id' => $this->city->id,
@@ -32,10 +28,6 @@ class ExecutorPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
-            'type' => !is_null($this->type) ? [
-                'id' =>  $this->type->id,
-                'name' => $this->type->title,
-            ] : null,
             'name' => $this->name,
             'rating' => $this->rating
         ];

@@ -24,7 +24,6 @@ class ExecutorUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'type_id' => ['nullable', 'integer', 'exists:company_types,id'],
             'name' => ['nullable', 'string', 'max:255'],
             'bin' => ['nullable', 'string', 'min:12', 'max:12'],
             'city_id' => ['nullable', 'integer', 'exists:cities,id'],

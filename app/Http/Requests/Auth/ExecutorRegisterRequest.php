@@ -24,7 +24,6 @@ class ExecutorRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'type_id' => ['required', 'integer', 'exists:company_types,id'],
             'name' => ['required', 'string'],
             'bin' => ['nullable', 'string', 'min:12', 'max:12'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],

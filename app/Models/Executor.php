@@ -11,7 +11,6 @@ class Executor extends Model
 
     protected $fillable = [
         'user_id', 
-        'type_id',
         'name',
         'bin',
         'city_id',
@@ -29,11 +28,6 @@ class Executor extends Model
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
-    }
-
-    public function type()
-    {
-        return $this->belongsTo(CompanyType::class, 'type_id');
     }
 
     public function user()
