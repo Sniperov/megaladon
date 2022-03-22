@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\v1\{
     OrderController,
     ProductCategoryController,
     StoreController,
+    SubscriptionController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::group(['guard' => 'api'], function () {
     Route::get('/order-categories', [CatalogController::class, 'orderCategories']);
     Route::get('/product-categories', [CatalogController::class, 'productCategories']);
     Route::get('/address', [OpenStreetMapController::class, 'getAddress']);
+    Route::get('/subscriptions', [SubscriptionController::class, 'index']);
     
     Route::group(['prefix' => '/auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
