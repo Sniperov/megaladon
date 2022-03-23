@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\Advert\CreateAdvertRequest;
 use App\Http\Requests\Advert\IndexAdvertsRequest;
 use App\Http\Requests\Advert\UpdateAdvertRequest;
+use App\Http\Requests\Chat\CreateChatRequest;
 use App\Services\v1\AdvertService;
 use Illuminate\Http\Request;
 
@@ -42,5 +43,10 @@ class AdvertController extends ApiController
     public function delete($id)
     {
         return $this->result($this->advertService->delete($id));
+    }
+
+    public function createChat($id, CreateChatRequest $request)
+    {
+        return $this->result($this->advertService->createChat($id));
     }
 }

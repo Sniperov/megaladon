@@ -16,7 +16,6 @@ class ProductCategoryService extends BaseService
     public function index()
     {
         $productCategories = $this->categoryRepo->index();
-        dd($productCategories);
         return $this->result(['categories' => $productCategories]);
     }
 }

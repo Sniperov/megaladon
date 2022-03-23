@@ -9,15 +9,20 @@ class Chat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['iniciator_id', 'user_id'];
+    protected $fillable = [];
 
     public function chatable()
     {
         return $this->morphTo('chatable');
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'chat_users', 'chat_id', 'user_id');
+    }
+
     public function lastMessage()
     {
-        return $this->hasOne(ChatMessage::class, 'chat_id', 'id')->lastestOfMany();
+        return $this->hasOne(ChatMessage::class, 'chat_id', 'id')->latest('created_at')->first();;
     }
 }

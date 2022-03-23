@@ -4,7 +4,7 @@ namespace App\Http\Requests\Chat;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateChatRequest extends FormRequest
+class IndexMessagesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class CreateChatRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'startRow' => ['nullable', 'integer'],
+            'rowsPerPage' => ['nullable', 'integer'],
         ];
     }
 }

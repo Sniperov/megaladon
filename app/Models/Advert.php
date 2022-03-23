@@ -38,4 +38,9 @@ class Advert extends Model
     {
         return $this->belongsTo(AdvertCategory::class, 'category_id');
     }
+
+    public function chatable()
+    {
+        return $this->morphOne(Chat::class, 'chatable');
+    }
 }

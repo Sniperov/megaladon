@@ -289,15 +289,13 @@ class OrderService extends BaseService
             return $this->error(406, 'Вы не можете создать чат без исполнителя');
         }
 
-        $iniciator = $this->apiAuthUser();
-        if (is_null($iniciator)) {
+        $user = $this->apiAuthUser();
+        if (is_null($user)) {
             return $this->errFobidden('Ошибка авторизации');
         }
 
-        $order->chatable()->create([
-            'iniciator_id' => $iniciator->id,
-            'user_id' => $order->executor_id,
-        ]);
+        $chat = $order->chatable()->create([]);
+        $chat->members()->attach([$user->id => ['chat_id' => $chat->id], $order->executor->user_id => ['chat_id' => $chat->id]]);
 
         return $this->ok();
     }

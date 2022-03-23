@@ -71,6 +71,7 @@ Route::group(['guard' => 'api'], function () {
             Route::delete('/{id}/delete', [OrderController::class, 'delete']);
             Route::post('/{id}/complete', [OrderController::class, 'complete']);
             Route::post('/{id}/rate', [OrderController::class, 'rate']);
+            Route::post('/{id}/chat/create', [OrderController::class, 'createChat']);
             Route::post('/{id}/offer', [OrderOfferController::class, 'create']);
             Route::get('/{id}/offer', [OrderOfferController::class, 'orderOffers']);
             Route::get('/{id}/offer/{offerId}', [OrderOfferController::class, 'info']);
@@ -87,6 +88,7 @@ Route::group(['guard' => 'api'], function () {
             Route::post('/', [AdvertController::class, 'create']);
             Route::post('/{id}/update', [AdvertController::class, 'update']);
             Route::delete('/{id}/delete', [AdvertController::class, 'delete']);
+            Route::post('/{id}/chat/create', [AdvertController::class, 'createChat']);
         });
     });
 
@@ -107,8 +109,10 @@ Route::group(['guard' => 'api'], function () {
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => 'api'], function () {
+        Route::get('/', [ChatController::class, 'getChats']);
         Route::post('/send-message', [ChatController::class, 'sendMessage']);
-        Route::put('/edit-message', [ChatController::class, 'editMessage']);
-        Route::delete('/delete-message', [ChatController::class, 'deleteMessage']);
+        Route::get('/{id}', [ChatController::class, 'getMessages']);
+        Route::put('/edit-message/{id}', [ChatController::class, 'editMessage']);
+        Route::delete('/delete-message/{id}', [ChatController::class, 'deleteMessage']);
     });
 });

@@ -5,6 +5,7 @@ namespace App\Services\v1;
 use App\Models\Chat;
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Presenters\v1\ChatPresenter;
 use App\Repositories\ChatRepo;
 use App\Services\BaseService;
 
@@ -14,6 +15,26 @@ class ChatService extends BaseService
 
     public function __construct() {
         $this->chatRepo = new ChatRepo();
+    }
+
+    public function getChats(User $user)
+    {
+        $chatIds = $this->chatRepo->getChatIdsByUserId($user->id);
+        $chats = $this->chatRepo->index($chatIds);
+        
+        return $this->resultCollections($chats, ChatPresenter::class, 'chatList');
+    }
+
+    public function chatMessages(User $user, int $chatId, array $params)
+    {
+        $chat = Chat::find($chatId);
+
+        if (is_null($chat)) {
+            return $this->errNotFound('Чат не найден');
+        }
+
+        $messages = $this->chatRepo->indexMessages($chatId, $params);
+        return $this->resultCollections($messages, ChatPresenter::class, 'messages');
     }
 
     public function sendMessage(User $user, array $data)
@@ -57,5 +78,12 @@ class ChatService extends BaseService
         $this->chatRepo->deleteMessage($message_id);
 
         return $this->ok('Сообщение удалено');
+    }
+
+    private function attachMembersToChat(Chat $chat, array $userIds)
+    {
+        foreach ($userIds as $id) {
+            $chat->members()->attach(['user_id' => $id]);
+        }
     }
 }
