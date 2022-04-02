@@ -13,7 +13,6 @@ class Executor extends Model
         'user_id', 
         'name',
         'bin',
-        'city_id',
         'lat',
         'lon',
         'full_address',
@@ -23,11 +22,6 @@ class Executor extends Model
     public function services()
     {
         return $this->belongsToMany(ServiceType::class, 'executor_service_types');
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class, 'city_id');
     }
 
     public function user()

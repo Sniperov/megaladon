@@ -11,10 +11,6 @@ class ExecutorPresenter extends BasePresenter
         return [
             'id' => $this->id,
             'services' => $this->presentCollections($this->services, ServiceTypePresenter::class, 'list'),
-            "city" => !is_null($this->city) ? [
-                'id' => $this->city->id,
-                'name' => $this->city->name,
-            ] : null,
             'name' => $this->name,
             'bin' => $this->bin ?? null,
             'lat' => $this->lat,
