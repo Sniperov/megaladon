@@ -26,7 +26,6 @@ class ExecutorUpdateRequest extends FormRequest
         return [
             'name' => ['nullable', 'string', 'max:255'],
             'bin' => ['nullable', 'string', 'min:12', 'max:12'],
-            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
             'lat' => ['nullable', 'numeric'],
             'lon' => ['nullable', 'numeric'],
             'full_address' => ['nullable', 'string', 'max:255'],
