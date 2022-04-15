@@ -83,7 +83,7 @@ class AuthService extends BaseService
 
         return $this->result([
             'user' => $user,
-            'executor' => $executor,
+            'executor' => (new ExecutorPresenter($executor))->edited(),
         ]);
     }
 

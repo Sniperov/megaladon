@@ -29,7 +29,7 @@ class ExecutorRegisterRequest extends FormRequest
             'lon' => ['required', 'numeric'],
             'lat' => ['required', 'numeric'],
             'full_address' => ['required', 'string', 'max:255'],
-            'services.*' => ['required', 'integer', 'exists:service_types,id'],
+            'services.*' => ['required', 'integer', 'exists:order_categories,id'],
         ];
     }
 }

@@ -10,13 +10,14 @@ class ExecutorPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
-            'services' => $this->presentCollections($this->services, ServiceTypePresenter::class, 'list'),
+            'services' => $this->presentCollections($this->services, OrderCategoryPresenter::class, 'executorList'),
             'name' => $this->name,
             'bin' => $this->bin ?? null,
             'lat' => $this->lat,
             'lon' => $this->lon,
             'full_address' => $this->full_address,
             'rating' => $this->rating ?? null,
+            'subscription_expired_at' => is_null($this->activeInvoice()) ? null : strtotime($this->activeInvoice()->expired_at),
         ];
     }
 

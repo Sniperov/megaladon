@@ -50,4 +50,9 @@ class Store extends Model
     {
         return $this->morphMany(Rating::class, 'ratingable');
     }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'invoiceable');
+    }
 }

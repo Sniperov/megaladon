@@ -29,7 +29,7 @@ class ExecutorUpdateRequest extends FormRequest
             'lat' => ['nullable', 'numeric'],
             'lon' => ['nullable', 'numeric'],
             'full_address' => ['nullable', 'string', 'max:255'],
-            'services.*' => ['required', 'integer', 'exists:service_types,id'],
+            'services.*' => ['required', 'integer', 'exists:order_categories,id'],
         ];
     }
 }

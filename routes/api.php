@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\{
     CatalogController,
     ChatController,
     CityController,
+    InvoiceController,
     OpenStreetMapController,
     OrderController,
     ProductCategoryController,
@@ -59,6 +60,12 @@ Route::group(['guard' => 'api'], function () {
         Route::post('/change-token', [UserController::class, 'updateToken']);
         Route::delete('/disable-notifications', [UserController::class, 'disableNotifications']);
         Route::get('/{id}', [UserController::class, 'profile']);
+    });
+
+    Route::group(['prefix' => 'invoice', 'middleware' => 'api'], function () {
+        Route::post('/executor/create', [InvoiceController::class, 'executorCreate']);
+        Route::post('/store/create', [InvoiceController::class, 'storeCreate']);
+        Route::post('/{id}/paid', [InvoiceController::class, 'paid']);
     });
 
     Route::group(['prefix' => 'order'], function () {

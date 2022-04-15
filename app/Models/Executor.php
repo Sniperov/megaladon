@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,7 +22,7 @@ class Executor extends Model
 
     public function services()
     {
-        return $this->belongsToMany(ServiceType::class, 'executor_service_types');
+        return $this->belongsToMany(OrderCategory::class, 'executor_service_types');
     }
 
     public function user()
@@ -32,5 +33,18 @@ class Executor extends Model
     public function rating()
     {
         return $this->morphMany(Rating::class, 'ratingable');
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'invoiceable');
+    }
+
+    public function activeInvoice()
+    {
+        return $this->invoices()
+            ->where('status', Invoice::STATUS_PAID)
+            ->whereDate('expired_at', '>', Carbon::now())
+            ->first();
     }
 }

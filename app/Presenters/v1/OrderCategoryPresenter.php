@@ -14,4 +14,12 @@ class OrderCategoryPresenter extends BasePresenter
             'child' => $this->presentCollections($this->child, OrderCategoryPresenter::class, 'list'),
         ];
     }
+
+    public function executorList()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+        ];
+    }
 }
