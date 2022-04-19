@@ -36,6 +36,11 @@ class InvoiceService extends BaseService
             return $this->errValidate('Данная подписка не предназначена для исполнителя');
         }
 
+        if ($subscription->price == 0) {
+            $data['status'] = Invoice::STATUS_PAID;
+            $data['expired_at'] = Carbon::now()->addMonths($subscription->validity);
+        }
+
         $invoice = $executor->invoices()->create($data);
 
         return $this->result([
@@ -60,6 +65,11 @@ class InvoiceService extends BaseService
         }
         if ($subscription->type !== Subscription::STORE) {
             return $this->errValidate('Данная подписка не предназначена для магазина');
+        }
+
+        if ($subscription->price == 0) {
+            $data['status'] = Invoice::STATUS_PAID;
+            $data['expired_at'] = Carbon::now()->addMonths($subscription->validity);
         }
 
         $invoice = $store->invoices()->create($data);
