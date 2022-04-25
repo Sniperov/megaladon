@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['guard' => 'api'], function () {
     Route::get('/cities', [CatalogController::class, 'cities']);
     Route::get('/order-categories', [CatalogController::class, 'orderCategories']);
-    Route::get('/product-categories', [CatalogController::class, 'productCategories']);
+    Route::get('/advert-categories', [CatalogController::class, 'advertCategories']);
     Route::get('/address', [OpenStreetMapController::class, 'getAddress']);
     Route::get('/subscriptions', [SubscriptionController::class, 'index']);
     

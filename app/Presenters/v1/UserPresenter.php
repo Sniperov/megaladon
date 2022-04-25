@@ -25,7 +25,7 @@ class UserPresenter extends BasePresenter
             'id' => $this->id,
             'name' => $this->name,
             'photo_url' => $this->photo_url ? url($this->photo_url) : null,
-            // 'count_orders' => $this->count_orders,
+            'count_orders' => $this->countCompletedOrders(),
             // 'rating' => $this->rating,
         ];
     }

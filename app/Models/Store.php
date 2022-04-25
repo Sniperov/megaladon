@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,5 +55,14 @@ class Store extends Model
     public function invoices()
     {
         return $this->morphMany(Invoice::class, 'invoiceable');
+    }
+
+    public function activeInvoice()
+    {
+        return $this->invoices()
+            ->where('status', Invoice::STATUS_PAID)
+            ->whereDate('expired_at', '>', Carbon::now())
+            ->orderBy('id', 'desc')
+            ->first();
     }
 }

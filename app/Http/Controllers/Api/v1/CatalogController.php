@@ -20,8 +20,8 @@ class CatalogController extends ApiController
         return $this->result($response);
     }
 
-    public function productCategories()
+    public function advertCategories()
     {
-        return $this->result((new CatalogService())->productCategories());
+        return $this->result((new CatalogService())->advertCategories());
     }
 }

@@ -97,11 +97,20 @@ class InvoiceService extends BaseService
         }
 
         if ($invoice !== Invoice::STATUS_PAID) {
-            (new InvoiceRepo())->update($invoice->id, [
-                'meta' => json_encode($data), 
-                'status' => Invoice::STATUS_PAID,
-                'expired_at' => Carbon::now()->addMonths($invoice->subscription->validity),
-            ]);
+            if ($invoice->invoiceable->activeInvoice()) {
+                (new InvoiceRepo())->update($invoice->id, [
+                    'meta' => json_encode($data), 
+                    'status' => Invoice::STATUS_PAID,
+                    'expired_at' => Carbon::parse($invoice->invoiceable->activeInvoice()->expired_at)->addMonths($invoice->subscription->validity),
+                ]);
+            }
+            else {
+                (new InvoiceRepo())->update($invoice->id, [
+                    'meta' => json_encode($data), 
+                    'status' => Invoice::STATUS_PAID,
+                    'expired_at' => Carbon::now()->addMonths($invoice->subscription->validity),
+                ]);
+            }
         }
 
         return $this->ok();

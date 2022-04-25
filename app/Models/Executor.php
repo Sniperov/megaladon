@@ -45,6 +45,7 @@ class Executor extends Model
         return $this->invoices()
             ->where('status', Invoice::STATUS_PAID)
             ->whereDate('expired_at', '>', Carbon::now())
+            ->orderBy('id', 'desc')
             ->first();
     }
 }

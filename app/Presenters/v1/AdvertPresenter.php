@@ -35,4 +35,13 @@ class AdvertPresenter extends BasePresenter
             'created_at' => $this->created_at,
         ];
     }
+
+    public function categories()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->name,
+            'child' => $this->presentCollections($this->child, AdvertPresenter::class, 'categories'),
+        ];
+    }
 }
