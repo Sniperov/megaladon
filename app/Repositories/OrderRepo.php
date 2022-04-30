@@ -42,6 +42,10 @@ class OrderRepo
             $query->where('user_id', $params['user_id']);
         }
 
+        if (isset($params['executor_id'])) {
+            $query->where('executor_id', $params['executor_id']);
+        }
+
         if (isset($params['last'])) {
             if ($params['last'] == 'last3day') {
                 $query->where('created_at', '>', Carbon::now()->subDays(3)->toDateTimeString());

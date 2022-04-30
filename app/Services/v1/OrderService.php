@@ -113,6 +113,17 @@ class OrderService extends BaseService
         return $this->resultCollections($orders, OrderPresenter::class, 'list');
     }
 
+    public function indexMyResponded(array $params)
+    {
+        $executor = $this->apiAuthUser()->executor()->first();
+        if (is_null($executor)) {
+            return $this->errNotFound('Исполнитель не найден');
+        }
+        $params['executor_id'] = $executor->id;
+        $orders = $this->orderRepo->index($params);
+        return $this->resultCollections($orders, OrderPresenter::class, 'list');
+    }
+
     public function info($id)
     {
         $order = Order::with('media', 'category')->find($id);

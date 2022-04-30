@@ -45,6 +45,12 @@ class OrderController extends ApiController
         return $this->result($this->orderService->indexMy($params));
     }
 
+    public function indexMyResponded(IndexOrderRequest $request)
+    {
+        $params = $request->validated();
+        return $this->result($this->orderService->indexMyResponded($params));
+    }
+
     public function info($id)
     {
         return $this->result($this->orderService->info($id));

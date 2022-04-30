@@ -73,6 +73,7 @@ Route::group(['guard' => 'api'], function () {
 
         Route::group(['middleware' => 'api'], function () {
             Route::get('/my', [OrderController::class, 'indexMy']);
+            Route::get('/my-responded', [OrderController::class, 'indexMyResponded']);
             Route::post('/create', [OrderController::class, 'store']);
             Route::post('/{id}/update', [OrderController::class, 'update']);
             Route::delete('/{id}/delete', [OrderController::class, 'delete']);
