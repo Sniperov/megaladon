@@ -18,6 +18,7 @@ class AdvertRepo
         $query = Advert::with('media');
         $query = $this->applyFilterQuery($query, $params);           
         $query = $this->applyPaginationQuery($query, $params);
+        $query = $this->applyOrderBy($query, $params);
         return $query->get();
     }
 
@@ -75,6 +76,12 @@ class AdvertRepo
         } else {
             $query->take(100);
         }
+        return $query;
+    }
+
+    private function applyOrderBy($query, $params)
+    {
+        $query->orderBy('id', 'DESC');
         return $query;
     }
 }

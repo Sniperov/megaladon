@@ -59,6 +59,7 @@ class OrderService extends BaseService
 
         $data['order_id'] = $orderId;
         $data['user_id'] = $user->id;
+        $data['status'] = Order::STATUS_ACTIVE;
 
         $offerRepo->store($data);
 
@@ -130,8 +131,16 @@ class OrderService extends BaseService
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
         }
+        
+        $isResponded = false;
+        $offer = OrderOffer::where('user_id', $this->apiAuthUser()->id)->where('order_id', $id)->first();
+        if ($offer) {
+            $isResponded = true;
+        }
+
         return $this->result([
             'order' => (new OrderPresenter($order))->detail(),
+            'is_responded' => $isResponded,
         ]);
     }
 

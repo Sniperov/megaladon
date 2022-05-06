@@ -29,4 +29,16 @@ class UserPresenter extends BasePresenter
             // 'rating' => $this->rating,
         ];
     }
+
+    public function shortAdvert()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'photo_url' => $this->photo_url ? url($this->photo_url) : null,
+            'count_orders' => $this->countCompletedOrders(),
+            // 'rating' => $this->rating,
+        ];
+    }
 }
