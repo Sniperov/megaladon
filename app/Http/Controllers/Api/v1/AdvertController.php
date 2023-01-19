@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Advert\CreateAdvertRequest;
 use App\Http\Requests\Advert\IndexAdvertsRequest;
+use App\Http\Requests\Advert\IndexMyAdvertsRequest;
 use App\Http\Requests\Advert\UpdateAdvertRequest;
 use App\Http\Requests\Chat\CreateChatRequest;
 use App\Services\v1\AdvertService;
@@ -22,6 +23,14 @@ class AdvertController extends ApiController
     public function index(IndexAdvertsRequest $request)
     {
         $params = $request->validated();
+        return $this->result($this->advertService->index($params));
+    }
+
+    public function indexMy(IndexMyAdvertsRequest $request)
+    {
+        $params = $request->validated();
+        $params['user_id'] = $this->authUser()->id;
+
         return $this->result($this->advertService->index($params));
     }
 

@@ -5,7 +5,9 @@ namespace App\Services\v1;
 use App\Events\StoreRatedEvent;
 use App\Models\Store;
 use App\Models\User;
+use App\Presenters\v1\CompanyTypePresenter;
 use App\Presenters\v1\StorePresenter;
+use App\Repositories\CompanyRepo;
 use App\Repositories\StoreRepo;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +18,12 @@ class StoreService extends BaseService
 
     public function __construct() {
         $this->storeRepo = new StoreRepo();
+    }
+
+    public function types()
+    {
+        $collections = (new CompanyRepo())->index();
+        return $this->resultCollections($collections, CompanyTypePresenter::class, 'list');
     }
 
     public function updateProfile(User $user, array $data) : array

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\v1\{
     ProductCategoryController,
     StoreController,
     SubscriptionController,
+    ServiceTypeController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,8 @@ Route::group(['guard' => 'api'], function () {
     Route::get('/advert-categories', [CatalogController::class, 'advertCategories']);
     Route::get('/address', [OpenStreetMapController::class, 'getAddress']);
     Route::get('/subscriptions', [SubscriptionController::class, 'index']);
+    Route::get('/service-types', [ServiceTypeController::class, 'index']);
+    Route::get('/company-types', [StoreController::class, 'types']);
     
     Route::group(['prefix' => '/auth'], function () {
         Route::post('/login', [AuthController::class, 'login']);
@@ -90,6 +93,7 @@ Route::group(['guard' => 'api'], function () {
 
     Route::group(['prefix' => 'adverts'], function() {
         Route::get('/', [AdvertController::class, 'index']);
+        Route::get('/my', [AdvertController::class, 'indexMy']);
         Route::get('/{id}', [AdvertController::class, 'info']);
 
         Route::group(['middleware' => 'api'], function () {

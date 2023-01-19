@@ -63,6 +63,10 @@ class AdvertRepo
             }
         }
 
+        if (isset($params['user_id'])) {
+            $query->where('user_id', $params['user_id']);
+        }
+
         return $query;
     }
 

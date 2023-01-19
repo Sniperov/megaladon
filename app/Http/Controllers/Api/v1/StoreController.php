@@ -18,6 +18,11 @@ class StoreController extends ApiController
         $this->storeService = new StoreService();
     }
 
+    public function types()
+    {
+        return $this->result($this->storeService->types());
+    }
+
     public function updateProfile(UpdateStoreRequest $request)
     {
         $data = $request->validated();
