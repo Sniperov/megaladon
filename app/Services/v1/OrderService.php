@@ -131,11 +131,14 @@ class OrderService extends BaseService
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
         }
-        
+
+        $user = $this->apiAuthUser();
         $isResponded = false;
-        $offer = OrderOffer::where('user_id', $this->apiAuthUser()->id)->where('order_id', $id)->first();
-        if ($offer) {
-            $isResponded = true;
+        if (!is_null($user)) {
+            $offer = OrderOffer::where('user_id', $user->id)->where('order_id', $id)->first();
+            if ($offer) {
+                $isResponded = true;
+            }
         }
 
         return $this->result([
@@ -298,15 +301,11 @@ class OrderService extends BaseService
         return $this->ok();
     }
 
-    public function createChat(int $orderId)
+    public function createChat(int $orderId, array $data)
     {
         $order = Order::find($orderId);
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
-        }
-
-        if ($order->status !== Order::STATUS_HAS_EXECUTOR) {
-            return $this->error(406, 'Вы не можете создать чат без исполнителя');
         }
 
         $user = $this->apiAuthUser();
@@ -314,8 +313,18 @@ class OrderService extends BaseService
             return $this->errFobidden('Ошибка авторизации');
         }
 
+        $executor = Executor::find($data['executor_id']);
+        if (is_null($executor)) {
+            return $this->errNotFound('Исполнитель не найден');
+        }
+
+        $orderOffer = OrderOffer::where('order_id', $order->id)->where('user_id', $executor->user_id)->first();
+        if (is_null($orderOffer)) {
+            return $this->errNotAcceptable('Исполнитель не отправлял вам предожение на этот заказ');
+        }
+
         $chat = $order->chatable()->create([]);
-        $chat->members()->attach([$user->id => ['chat_id' => $chat->id], $order->executor->user_id => ['chat_id' => $chat->id]]);
+        $chat->members()->attach([$user->id => ['chat_id' => $chat->id], $executor->user_id => ['chat_id' => $chat->id]]);
 
         return $this->ok();
     }

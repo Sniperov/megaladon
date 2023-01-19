@@ -145,9 +145,6 @@ class InvoiceService extends BaseService
 
     private function generatePaymentParams($transaction_id)
     {
-        $pg_merchant_id = 543326;
-        $secret_key ='yGLBIQphhMhc3Ekg';
-
         $request = [
             'pg_merchant_id'=> $this->config['merchant_id'],
             'pg_payment_id' => $transaction_id,
