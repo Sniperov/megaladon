@@ -35,9 +35,11 @@ class AuthService extends BaseService
             return $this->error(406, 'Сначала подтвердите номер телефона');
         }
         
-        if (! $token = auth('api')->attempt($data)) {
+        if (!Hash::check($data['password'], $user->password)) {
             return $this->error(401, 'Неверные номер пользователя или пароль');
         }
+
+        $token = $user->createToken('api')->plainTextToken;
 
         return $this->result([
             'token' => $token,
@@ -128,7 +130,7 @@ class AuthService extends BaseService
 
         $this->userRepo->confirmPhone($data['phone']);
         $user = $this->userRepo->getUserByPhone($data['phone']);
-        $token = auth('api')->login($user);
+        $token = $user->createToken('api')->plainTextToken;
 
         return $this->result([
             'token' => $token,
@@ -152,7 +154,11 @@ class AuthService extends BaseService
 
     public function logout()
     {
-        auth('api')->logout();
+        $user = auth('api')->user();
+        if (is_null($user)) {
+            return $this->errFobidden('Unauthorized');
+        }
+        $user->tokens()->delete();
         return $this->ok();
     }
 }
