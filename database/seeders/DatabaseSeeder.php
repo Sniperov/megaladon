@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'city_id' => 1,
             'password' => Hash::make('123321'),
             'email' => 'snaiperov60@gmail.com',
+            'role' => 'admin',
         ]);
     }
 }
