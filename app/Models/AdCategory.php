@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AdvertCategory extends Model
+class AdCategory extends Model
 {
     use HasFactory, CrudTrait;
 
@@ -14,11 +14,11 @@ class AdvertCategory extends Model
 
     public function child()
     {
-        return $this->hasMany(AdvertCategory::class, 'parent_id');
+        return $this->hasMany(AdCategory::class, 'parent_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(AdvertCategory::class, 'parent_id');
+        return $this->belongsTo(AdCategory::class, 'parent_id');
     }
 }

@@ -36,7 +36,7 @@ class Advert extends Model
 
     public function category()
     {
-        return $this->belongsTo(AdvertCategory::class, 'category_id');
+        return $this->belongsTo(AdCategory::class, 'category_id');
     }
 
     public function chatable()

@@ -2,7 +2,7 @@
 
 namespace App\Services\v1;
 
-use App\Models\AdvertCategory;
+use App\Models\AdCategory;
 use App\Models\OrderCategory;
 use App\Models\ProductCategory;
 use App\Presenters\v1\AdvertPresenter;
@@ -25,7 +25,7 @@ class CatalogService extends BaseService
 
     public function advertCategories()
     {
-        $advertCategories = AdvertCategory::with('child')->where('parent_id', 0)->get();
+        $advertCategories = AdCategory::with('child')->where('parent_id', 0)->get();
         return $this->resultCollections($advertCategories, AdvertPresenter::class, 'categories');
     }
 }
