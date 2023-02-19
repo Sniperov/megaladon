@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\OrderCategoryRequest;
+use App\Http\Requests\SubscriptionRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class OrderCategoryCrudController
+ * Class SubscriptionCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class OrderCategoryCrudController extends CrudController
+class SubscriptionCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class OrderCategoryCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\OrderCategory::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/order-category');
-        CRUD::setEntityNameStrings('категория заказа', 'категории заказов');
+        CRUD::setModel(\App\Models\Subscription::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/subscription');
+        CRUD::setEntityNameStrings('подписку', 'подписки');
     }
 
     /**
@@ -40,19 +40,20 @@ class OrderCategoryCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn([
-            'name' => 'title',
-            'label' => 'Наименование',
-            'type' => 'text',
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'select_from_array',
+            'options' => ['executor' => 'Исполнитель', 'store' => 'Магазин'],
         ]);
         CRUD::addColumn([
-            'label'     => 'Родитель', // Table column heading
-            'type'      => 'select',
-            'name'      => 'parent_id', // the column that contains the ID of that connected entity;
-            'entity'    => 'parent', // the method that defines the relationship in your Model
-            'attribute' => 'title', // foreign key attribute that is shown to user
-            'model'     => "App\Models\OrderCategory", // foreign key model
-            'allows_null'  => true,
+            'name' => 'validity',
+            'label' => 'Срок действия (мес.)'
         ]);
+        CRUD::addColumn([
+            'name' => 'price',
+            'label' => 'Цена',
+        ]);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -68,24 +69,21 @@ class OrderCategoryCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(OrderCategoryRequest::class);
+        CRUD::setValidation(SubscriptionRequest::class);
 
         CRUD::addField([
-            'name' => 'title',
-            'label' => 'Наименование',
-            'type' => 'text',
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'select_from_array',
+            'options' => ['executor' => 'Исполнитель', 'store' => 'Магазин'],
         ]);
         CRUD::addField([
-            'label'     => 'Родитель', // Table column heading
-            'type'      => 'select',
-            'name'      => 'parent_id', // the column that contains the ID of that connected entity;
-            'entity'    => 'parent', // the method that defines the relationship in your Model
-            'attribute' => 'title', // foreign key attribute that is shown to user
-            'model'     => "App\Models\OrderCategory", // foreign key model
-            'allows_null'  => true,
-            'options'   => (function ($query) {
-                return $query->orderBy('title', 'ASC')->where('parent_id', NULL)->get();
-            }),
+            'name' => 'validity',
+            'label' => 'Срок действия (мес.)'
+        ]);
+        CRUD::addField([
+            'name' => 'price',
+            'label' => 'Цена',
         ]);
 
         /**
@@ -104,5 +102,19 @@ class OrderCategoryCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function autoSetupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::addColumn([
+            'name' => 'created_at',
+            'label' => 'Создан',
+        ]);
+        CRUD::addColumn([
+            'name' => 'updated_at',
+            'label' => 'Обновлён',
+        ]);
     }
 }
