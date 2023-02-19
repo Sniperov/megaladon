@@ -27,7 +27,7 @@ class CreateAdvertRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric'],
-            'category_id' => ['required', 'integer', 'exists:advert_categories,id'],
+            'category_id' => ['required', 'integer', 'exists:ad_categories,id'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
             'additional_phone' => ['nullable', 'string', 'starts_with:+'],
             'files' => ['nullable', 'array'],
