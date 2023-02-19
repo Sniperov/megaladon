@@ -5,3 +5,4 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('ad-category') }}"><i class="nav-icon la la-question"></i> Категории объявлений</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('city') }}"><i class="nav-icon la la-question"></i> Города</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('company-type') }}"><i class="nav-icon la la-question"></i> Виды компаний</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('service-type') }}"><i class="nav-icon la la-question"></i> Виды услуг</a></li>
