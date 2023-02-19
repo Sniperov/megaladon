@@ -36,6 +36,7 @@ class InvoiceCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('id');
         CRUD::column('invoiceable.name')->label('Владелец');
         CRUD::addColumn([
             'label'     => 'Подписка', // Table column heading

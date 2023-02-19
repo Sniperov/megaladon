@@ -41,14 +41,14 @@ class ExecutorService extends BaseService
 
     public function updateRating(Executor $executor) : void
     {
-        $ratings = $executor->rating()->get();
+        $ratings = $executor->ratings()->get();
         
         $sumRating = 0;
         foreach ($ratings as $rating) {
             $sumRating += $rating->rate;
         }
 
-        $countRates = $executor->rating()->count();
+        $countRates = $executor->ratings()->count();
 
         $this->executorRepo->update($executor->user_id, ['rating' => round($sumRating / $countRates, 1)]);
     }

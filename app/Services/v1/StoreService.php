@@ -183,14 +183,14 @@ class StoreService extends BaseService
 
     public function updateRating(Store $store) : void
     {
-        $ratings = $store->rating()->get();
+        $ratings = $store->ratings()->get();
         
         $sumRating = 0;
         foreach ($ratings as $rating) {
             $sumRating += $rating->rate;
         }
 
-        $countRates = $store->rating()->count();
+        $countRates = $store->ratings()->count();
 
         $this->storeRepo->update($store->id, ['rating' => round($sumRating / $countRates, 1)]);
     }
