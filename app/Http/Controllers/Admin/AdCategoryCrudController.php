@@ -81,10 +81,10 @@ class AdCategoryCrudController extends CrudController
             'name'      => 'parent_id', // the column that contains the ID of that connected entity;
             'entity'    => 'parent', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
-            'model'     => "App\Models\AdvertCategory", // foreign key model
+            'model'     => "App\Models\AdCategory", // foreign key model
             'allows_null'  => true,
             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->where('parent_id', 0)->get();
+                return $query->orderBy('name', 'ASC')->where('parent_id', NULL)->get();
             }),
         ]);
 

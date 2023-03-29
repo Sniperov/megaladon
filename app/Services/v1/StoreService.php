@@ -77,7 +77,7 @@ class StoreService extends BaseService
             return $this->errNotFound('Магазин не найден');
         }
 
-        if ($store->media()->count() >= 2) {
+        if ($store->media()->where('active', 1)->count() >= 2) {
             return $this->error(406, 'Вы не можете загрузить больше 2х прайс-листов');
         }
 
@@ -105,6 +105,10 @@ class StoreService extends BaseService
         if (is_null($file)) {
             return $this->errNotFound('Прайс-лист не найден');
         }
+		
+		if ($store->media()->where('active', 1)->count() >= 2) {
+			return $this->errNotAcceptable('Вы не можете активировать больше 2х прайс-листов');
+		}
 
         $store->media()->where('id', $id)->update(['active' => 1]);
 

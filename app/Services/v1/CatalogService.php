@@ -13,7 +13,7 @@ class CatalogService extends BaseService
 {
     public function orderCategories()
     {
-        $categories = OrderCategory::with('child')->where('parent_id', 0)->get();
+        $categories = OrderCategory::with('child')->whereNull('parent_id')->get();
         return $this->resultCollections($categories, OrderCategoryPresenter::class, 'list');
     }
 
@@ -25,7 +25,7 @@ class CatalogService extends BaseService
 
     public function advertCategories()
     {
-        $advertCategories = AdCategory::with('child')->where('parent_id', 0)->get();
+        $advertCategories = AdCategory::with('child')->whereNull('parent_id')->get();
         return $this->resultCollections($advertCategories, AdvertPresenter::class, 'categories');
     }
 }

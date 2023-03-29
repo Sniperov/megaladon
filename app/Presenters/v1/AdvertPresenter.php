@@ -11,7 +11,7 @@ class AdvertPresenter extends BasePresenter
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'description' => mb_strimwidth($this->description, 0 , 128, '...'),
+            'description' => $this->description,
             'price' => number_format($this->price, 2),
             'media' => $this->presentCollections($this->media, MediaFilePresenter::class, 'list'),
             'created_at' => $this->created_at,

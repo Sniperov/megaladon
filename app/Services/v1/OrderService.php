@@ -228,7 +228,7 @@ class OrderService extends BaseService
             return $this->error(406, 'Вы не можете завершить чужой заказ');
         }
 
-        if ($order->status !== Order::STATUS_HAS_EXECUTOR) {
+        if ($order->status != Order::STATUS_HAS_EXECUTOR) {
             return $this->error(406, 'Чтобы завершить заказ он должен иметь статус "В работе"');
         }
 

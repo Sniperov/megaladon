@@ -9,9 +9,10 @@ class StorePresenter extends BasePresenter
     public function detail()
     {
         return [
+			'id' => $this->id,
             'type' => !is_null($this->type) ? [
                 'id' =>  $this->type->id,
-                'name' => $this->type->name,
+                'name' => $this->type->title,
             ] : null,
             'name' => $this->name,
             'bin' => $this->bin,
@@ -31,7 +32,9 @@ class StorePresenter extends BasePresenter
     public function list()
     {
         return [
-            'type' => $this->type->name,
+			'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type->title,
             'rating' => $this->rating,
             'full_address' => $this->full_address,
             'photo_url' => $this->photo_url,

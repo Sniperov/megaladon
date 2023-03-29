@@ -53,8 +53,6 @@ class AuthService extends BaseService
             return $this->errValidate('Пользователь с таким номером существует');
         }
 
-        $data['password'] = Hash::make($data['password']);
-
         $user = $this->userRepo->store($data);
         (new PhoneConfirmationService())->sendCode($user, $data['phone']);
 

@@ -10,7 +10,7 @@ class ExecutorPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
-            'services' => $this->presentCollections($this->services, OrderCategoryPresenter::class, 'executorList'),
+            'services' => $this->presentCollections($this->services, ServiceTypePresenter::class, 'list'),
             'name' => $this->name,
             'bin' => $this->bin ?? null,
             'lat' => $this->lat,
