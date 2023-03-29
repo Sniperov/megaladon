@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use App\Events\NewMessageEvent;
 use App\Models\Chat;
 use App\Models\ChatMessage;
 use App\Models\User;
@@ -40,7 +41,9 @@ class ChatService extends BaseService
     public function sendMessage(User $user, array $data)
     {
         $data['user_id'] = $user->id;
-        return $this->result(['message' => $this->chatRepo->storeChatMessage($data)]);
+        $message = $this->chatRepo->storeChatMessage($data);
+        event(new NewMessageEvent($data['chat_id'], $data['message'], [$user->id]));
+        return $this->result(['message' => $message]);
     }
 
     public function editMessage(int $message_id, User $user, array $data)

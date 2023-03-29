@@ -3,6 +3,8 @@
 namespace App\Services\v1;
 
 use App\Events\ExecutorRatedEvent;
+use App\Events\OfferAcceptedEvent;
+use App\Events\OfferCreatedEvent;
 use App\Http\Requests\Order\CommentOrderRequest;
 use App\Models\Executor;
 use App\Models\Order;
@@ -62,6 +64,9 @@ class OrderService extends BaseService
         $data['status'] = Order::STATUS_ACTIVE;
 
         $offerRepo->store($data);
+
+        $order = Order::find($orderId);
+        event(new OfferCreatedEvent($order));
 
         return $this->ok('Предложение отправленно');
     }
@@ -262,6 +267,8 @@ class OrderService extends BaseService
             'status' => Order::STATUS_HAS_EXECUTOR,
             'executor_id' => $offer->user_id,
         ]);
+
+        event(new OfferAcceptedEvent($offer->user_id, $orderId));
 
         return $this->ok();
     }
