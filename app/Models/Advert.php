@@ -10,7 +10,11 @@ class Advert extends Model
 {
     use HasFactory, CrudTrait;
 
+    const TYPE_SERVICE = 'service';
+    const TYPE_ADVERT = 'advert';
+
     protected $fillable = [
+        'type',
         'user_id',
         'title',
         'description',

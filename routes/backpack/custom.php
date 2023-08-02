@@ -16,10 +16,10 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('charts', 'ChartController@index');
     Route::crud('user', 'UserCrudController');
     Route::crud('ad-category', 'AdCategoryCrudController');
     Route::crud('city', 'CityCrudController');
-    Route::crud('company-type', 'CompanyTypeCrudController');
     Route::crud('service-type', 'ServiceTypeCrudController');
     Route::crud('order-category', 'OrderCategoryCrudController');
     Route::crud('subscription', 'SubscriptionCrudController');

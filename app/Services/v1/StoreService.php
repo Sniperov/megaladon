@@ -81,7 +81,7 @@ class StoreService extends BaseService
             return $this->error(406, 'Вы не можете загрузить больше 2х прайс-листов');
         }
 
-        $path = $data['file']->store('public/store/'.$store->id);
+        $path = $data['file']->store('public/store/');
         $store->media()->create([
             'storage_link' => Storage::url($path), 
         ]);
@@ -175,7 +175,7 @@ class StoreService extends BaseService
             return $this->error(406, 'Вы не можете оценить свой магазин');
         }
 
-        $store->rating()->create([
+        $store->ratings()->create([
             'user_id' => $user->id,
             'rate' => $rate,
         ]);

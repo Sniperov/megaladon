@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        City::create(['name' => 'Алматы']);
-        User::create([
-            'name' => 'Sniperov',
-            'phone' => '+77479400950',
-            'city_id' => 1,
-            'password' => Hash::make('123321'),
-            'email' => 'snaiperov60@gmail.com',
-            'role' => 'admin',
-        ]);
+        (new CitySeeder())->run();
+        // User::create([
+        //     'name' => 'Sniperov',
+        //     'phone' => '+77479400950',
+        //     'city_id' => 1,
+        //     'password' => Hash::make('123321'),
+        //     'email' => 'snaiperov60@gmail.com',
+        //     'role' => 'admin',
+        // ]);
     }
 }

@@ -28,13 +28,13 @@ class NewMessageListener
      */
     public function handle($event)
     {
-        $members = ChatUser::where('chat_id', $event->chat_id)->whereNotIn('user_id', $event->excludeUsers)->pluck('user_id');
-        $tokens = User::whereIn('id', $members->toArray())->pluck('device_token');
+        $members = ChatUser::where('chat_id', $event->message->chat_id)->whereNotIn('user_id', $event->excludeUsers)->pluck('user_id');
+        $tokens = User::whereIn('id', $members->toArray())->pluck('device_token')->toArray();
         (new PushNotificationService())->sendNotification($tokens,
             'Новое сообщение',
-            $event->text,
+            $event->message->message,
             [
-                'chat_id' => $event->chat_id
+                'chat_id' => $event->message->chat_id,
             ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services\v1;
 
 use App\Models\Executor;
 use App\Models\Order;
+use App\Models\User;
 use App\Presenters\v1\ExecutorPresenter;
 use App\Presenters\v1\FavoritePresenter;
 use App\Repositories\ExecutorRepo;
@@ -77,5 +78,19 @@ class ExecutorService extends BaseService
         (new FavoriteRepo())->store($data);
 
         return $this->ok('Исполнитель добавлен в избранные');
+    }
+
+    public function checkExecutor(User $user)
+    {
+        $executor = $user->executor()->first();
+            
+        if (is_null($executor)) {
+            return $this->errFobidden('Вы не зарегистрированны как Исполнитель.');
+        }
+        if (is_null($executor->activeInvoice())) {
+            return $this->errFobidden('У вас отсутствует подписка');
+        }
+
+        return $this->ok();
     }
 }

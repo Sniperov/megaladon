@@ -40,7 +40,16 @@ class ExecutorCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('user.name')->label('Пользователь');
+        CRUD::addColumn([
+            'label'     => 'Город', // Table column heading
+            'type'      => 'select',
+            'name'      => 'city_id', // the column that contains the ID of that connected entity;
+            'entity'    => 'city', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => "App\Models\City", // foreign key model
+        ]);
         CRUD::column('name')->label('Имя');
+        CRUD::column('description')->label('Описание')->limit(20);
         CRUD::column('bin')->label('БИН');
         CRUD::column('full_address')->label('Адрес');
         CRUD::column('rating')->label('Рейтинг');
@@ -72,7 +81,20 @@ class ExecutorCrudController extends CrudController
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model'     => "App\Models\User",
         ]);
+        CRUD::addField([
+            'label'     => 'Город', // Table column heading
+            'type'      => 'select',
+            'name'      => 'city_id', // the column that contains the ID of that connected entity;
+            'entity'    => 'city', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => "App\Models\City", // foreign key model
+        ]);
         CRUD::field('name')->label('Имя');
+        CRUD::addField([
+            'label' => 'Описание',
+            'name' => 'description',
+            'type' => 'textarea'
+        ]);
         CRUD::addField([
             // n-n relationship (with pivot table)
             'label'     => 'Услуги', // Table column heading
@@ -108,9 +130,15 @@ class ExecutorCrudController extends CrudController
 
     protected function autoSetupShowOperation()
     {
-        $this->setupListOperation();
-        
         CRUD::column('user.name')->label('Пользователь');
+        CRUD::addColumn([
+            'label'     => 'Город', // Table column heading
+            'type'      => 'select',
+            'name'      => 'city_id', // the column that contains the ID of that connected entity;
+            'entity'    => 'city', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => "App\Models\City", // foreign key model
+        ]);
         CRUD::column('name')->label('Имя');
         CRUD::column('bin')->label('БИН');
         CRUD::addColumn([
@@ -126,5 +154,10 @@ class ExecutorCrudController extends CrudController
         CRUD::column('rating')->label('Рейтинг');
         CRUD::column('lat');
         CRUD::column('lon');
+        CRUD::addColumn([
+            'label' => 'Описание',
+            'name' => 'description',
+            'limit' => 3000
+        ]);
     }
 }

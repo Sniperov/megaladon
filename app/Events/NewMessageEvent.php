@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Presenters\v1\ChatPresenter;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,12 +11,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessageEvent
+class NewMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $chat_id;
-    public $text;
+    public $message;
     public $excludeUsers;
 
     /**
@@ -23,11 +23,28 @@ class NewMessageEvent
      *
      * @return void
      */
-    public function __construct($chat_id, $text, $excludeUsers = [])
+    public function __construct($message, $excludeUsers = [])
     {
-        $this->chat_id = $chat_id;
-        $this->text = $text;
+        $this->message = $message;
         $this->excludeUsers = $excludeUsers;
     }
 
+    public function broadcastOn()
+    {
+        return [
+            new Channel('chat.' . $this->message->chat_id),
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'new_message';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'message' => (new ChatPresenter($this->message))->messages(),
+        ];
+    }
 }

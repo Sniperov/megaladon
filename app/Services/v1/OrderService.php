@@ -2,6 +2,7 @@
 
 namespace App\Services\v1;
 
+use App\Events\ChatCreatedEvent;
 use App\Events\ExecutorRatedEvent;
 use App\Events\OfferAcceptedEvent;
 use App\Events\OfferCreatedEvent;
@@ -32,12 +33,12 @@ class OrderService extends BaseService
     {
         $data['user_id'] = $user->id;
         $data['executor_id'] = 0;
-        $data['status'] = Order::STATUS_MODERATE;
+        $data['status'] = Order::STATUS_ACTIVE;
         $order = $this->orderRepo->store($data);
 
         if (isset($data['files'])) {
             foreach($data['files'] as $file) {
-                $path = $file->store('public/order/'.$order->id);
+                $path = $file->store('public/order/');
                 $order->media()->create([
                     'storage_link' => Storage::url($path), 
                 ]);
@@ -88,7 +89,7 @@ class OrderService extends BaseService
 
         if (isset($data['files'])) {
             foreach($data['files'] as $file) {
-                $path = $file->store('public/order/'.$order->id);
+                $path = $file->store('public/order/');
                 $order->media()->create([
                     'storage_link' => Storage::url($path), 
                 ]);
@@ -132,7 +133,7 @@ class OrderService extends BaseService
 
     public function info($id)
     {
-        $order = Order::with('media', 'category')->find($id);
+        $order = Order::with('media', 'category', 'executor')->find($id);
         if (is_null($order)) {
             return $this->errNotFound('Заказ не найден');
         }
@@ -263,9 +264,11 @@ class OrderService extends BaseService
             return $this->error(406, 'Вы не можете принять предложение чужого заказа');
         }
 
+        $executor = Executor::where('user_id', $offer->user_id)->first();
+
         $this->orderRepo->update($order, [
             'status' => Order::STATUS_HAS_EXECUTOR,
-            'executor_id' => $offer->user_id,
+            'executor_id' => $executor->id,
         ]);
 
         event(new OfferAcceptedEvent($offer->user_id, $orderId));
@@ -289,7 +292,7 @@ class OrderService extends BaseService
             return $this->error(406, 'Вы не можете оценить исполнителя чужого заказа');
         }
         
-        if ($order->status !== Order::STATUS_COMPLETED) {
+        if ($order->status != Order::STATUS_COMPLETED) {
             return $this->error(406, 'Вы пока не можете оценить исполнителя');
         }
 
@@ -298,7 +301,7 @@ class OrderService extends BaseService
             return $this->errNotFound('Исполнитель не найден');
         }
 
-        $executor->rating()->create([
+        $executor->ratings()->create([
             'user_id' => $user->id,
             'rate' => $rate,
         ]);
@@ -332,6 +335,8 @@ class OrderService extends BaseService
 
         $chat = $order->chatable()->create([]);
         $chat->members()->attach([$user->id => ['chat_id' => $chat->id], $executor->user_id => ['chat_id' => $chat->id]]);
+
+        event(new ChatCreatedEvent($executor->user_id, $chat));
 
         return $this->ok();
     }

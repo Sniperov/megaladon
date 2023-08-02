@@ -24,6 +24,7 @@ class UpdateAdvertRequest extends FormRequest
     public function rules()
     {
         return [
+            'type' => ['nullable', 'in:service,advert'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric'],

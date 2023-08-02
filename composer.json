@@ -11,7 +11,8 @@
         "illuminate/support": "^9.52",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "backpack/generators": "^3.3",

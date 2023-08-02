@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Presenters\v1\ChatPresenter;
 use App\Repositories\ChatRepo;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\Storage;
 
 class ChatService extends BaseService
 {
@@ -41,9 +42,15 @@ class ChatService extends BaseService
     public function sendMessage(User $user, array $data)
     {
         $data['user_id'] = $user->id;
+
+        if (isset($data['file'])) {
+            $data['file_url'] = Storage::url($data['file']->store('public/chat'));
+        }
+
         $message = $this->chatRepo->storeChatMessage($data);
-        event(new NewMessageEvent($data['chat_id'], $data['message'], [$user->id]));
-        return $this->result(['message' => $message]);
+        $message = ChatMessage::find($message->id);
+        broadcast(new NewMessageEvent($message, [$user->id]));
+        return $this->result(['chat_message' => (new ChatPresenter($message))->messages()]);
     }
 
     public function editMessage(int $message_id, User $user, array $data)

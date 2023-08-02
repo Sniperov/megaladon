@@ -10,6 +10,7 @@ class AdvertPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
+            'type' => $this->type,
             'title' => $this->title,
             'description' => $this->description,
             'price' => number_format($this->price, 2),
@@ -22,6 +23,7 @@ class AdvertPresenter extends BasePresenter
     {
         return [
             'id' => $this->id,
+            'type' => $this->type,
             'title' => $this->title,
             'description' => $this->description,
             'price' => number_format($this->price, 2),

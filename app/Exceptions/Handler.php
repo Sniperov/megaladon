@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Pusher\PusherException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -56,25 +57,40 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AuthorizationException $e, Request $request) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Требуется авторизация'
-            ], 403);
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Требуется авторизация'
+                ], 403);
+            }
         });
 
         $this->renderable(function (AuthenticationException $e, Request $request) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Требуется авторизация'
-            ], 401); 
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Требуется авторизация'
+                ], 401);
+            }
         });
 		
 		
         $this->renderable(function (AccessDeniedHttpException $e, Request $request) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Нет доступа'
-            ], 403); 
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Нет доступа'
+                ], 403);
+            }
+        });
+
+        $this->renderable(function (PusherException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 403);
+            }
         });
     }
 }

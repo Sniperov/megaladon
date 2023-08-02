@@ -13,7 +13,9 @@ class Executor extends Model
 
     protected $fillable = [
         'user_id', 
+        'city_id',
         'name',
+        'description',
         'bin',
         'lat',
         'lon',
@@ -39,6 +41,11 @@ class Executor extends Model
     public function invoices()
     {
         return $this->morphMany(Invoice::class, 'invoiceable');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 
     public function activeInvoice()

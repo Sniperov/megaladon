@@ -41,6 +41,15 @@ class AdvertCrudController extends CrudController
     {
         CRUD::column('id');
         CRUD::addColumn([
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'select_from_array',
+            'options' => [
+                'service' => 'Услуги',
+                'advert' => 'Объявление',
+            ],
+        ]);
+        CRUD::addColumn([
             'label'     => 'Пользователь', // Table column heading
             'type'      => 'select',
             'name'      => 'user_id', // the column that contains the ID of that connected entity;
@@ -78,6 +87,15 @@ class AdvertCrudController extends CrudController
             'entity'    => 'user', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model'     => "App\Models\User",
+        ]);
+        CRUD::addField([
+            'name' => 'type',
+            'label' => 'Тип',
+            'type' => 'select_from_array',
+            'options' => [
+                'service' => 'Услуги',
+                'advert' => 'Объявление',
+            ],
         ]);
         CRUD::field('title')->label('Заголовок');
         CRUD::field('description')->label('Описание');

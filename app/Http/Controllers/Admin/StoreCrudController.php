@@ -28,7 +28,7 @@ class StoreCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Store::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/store');
-        CRUD::setEntityNameStrings('store', 'stores');
+        CRUD::setEntityNameStrings('Металлопрокат', 'Металлопрокат');
     }
 
     /**
@@ -42,7 +42,6 @@ class StoreCrudController extends CrudController
         CRUD::column('user.name')->label('Пользователь');
         CRUD::column('name')->label('Наименование');
         CRUD::column('city.name')->label('Город');
-        CRUD::column('type.title')->label('Вид компании');
         CRUD::column('bin')->label('БИН');
         CRUD::column('full_address')->label('Адрес');
         CRUD::column('rating')->label('Рейтинг');
@@ -71,14 +70,6 @@ class StoreCrudController extends CrudController
             'entity'    => 'user', // the method that defines the relationship in your Model
             'attribute' => 'name', // foreign key attribute that is shown to user
             'model'     => "App\Models\User",
-        ]);
-        CRUD::addField([
-            'label'     => 'Тип компании', // Table column heading
-            'type'      => 'select',
-            'name'      => 'type_id', // the column that contains the ID of that connected entity;
-            'entity'    => 'type', // the method that defines the relationship in your Model
-            'attribute' => 'title', // foreign key attribute that is shown to user
-            'model'     => "App\Models\CompanyType",
         ]);
         CRUD::addField([
             'label'     => 'Город', // Table column heading
